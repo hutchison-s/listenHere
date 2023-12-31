@@ -1,5 +1,6 @@
 import './App.css'
 import NavBar from "./components/NavBar"
+// eslint-disable-next-line no-unused-vars
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useState, useEffect } from 'react';
@@ -8,7 +9,7 @@ import { MapContainer, TileLayer} from 'react-leaflet';
 
 function App() {
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = () => {
       navigator.geolocation.clearWatch(watcher)
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
