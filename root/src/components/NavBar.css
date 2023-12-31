@@ -1,0 +1,61 @@
+#navbar {
+    position: fixed;
+    width: 100vw;
+    height: 50px;
+    display: flex;
+    padding: 0.5rem 0.5rem;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--jetlight);
+}
+.logo {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    font-size: x-large;
+}
+.logo img {
+    height: 100%;
+}
+#menuToggle {
+    background: var(--lighter-25);
+    color: var(--softwhite);
+    border: none;
+    box-shadow: 0 0 0.2rem var(--darker-25);
+    width: 2.5rem;
+    border-radius: 0.25rem;
+    font-size: larger;
+    cursor: pointer;
+}
+#hiddenMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border-bottom: 4px solid var(--jetlight);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s;
+}
+#hiddenMenu a {
+    color: var(--softwhite);
+    text-decoration: none;
+}
+#hiddenMenu.expanded {
+    max-height: 400px;
+    transition: max-height 0.3s;
+}
+#hiddenMenu li {
+    display: block;
+    text-align: center;
+    font-size: large;
+    padding: 1rem;
+    margin: 0.25rem 0;
+    cursor: pointer;
+    background-color: var(--darker-25);
+}
+#hiddenMenu li:hover,
+#menuToggle:active,
+#menuToggle:has(~ .expanded) {
+    background-color: var(--teal-50);
+    color: var(--yellow)
+}
