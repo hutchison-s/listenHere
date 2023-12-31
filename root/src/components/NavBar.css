@@ -31,6 +31,7 @@
     top: 100%;
     left: 0;
     width: 100%;
+    background-color: var(--jet);
     border-bottom: 4px solid var(--jetlight);
     overflow: hidden;
     max-height: 0;
