@@ -1,5 +1,5 @@
 import "./NewRecording.css"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons'
 
@@ -10,11 +10,6 @@ export default function NewRecording() {
     const [isRecording, setIsRecording] = useState(false)
     const [streamer, setStreamer] = useState(null)
     const chunks = [];
-
-    useEffect(()=>{
-        initiateStream()
-        console.log("initiated")
-    }, [])
 
     function initiateStream() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -34,12 +29,12 @@ export default function NewRecording() {
                 })
                 .catch((err) => {
                     console.error(`The following getUserMedia error occurred: ${err}`);
+                    alert("Microphone access not allowed. Please check your device's settings.")
                 });
         } else {
             console.log("getUserMedia not supported on your browser!");
         }
     }
-    
 
     function record() {
         console.log(streamer)
@@ -76,6 +71,11 @@ export default function NewRecording() {
                 id="dropNew"
                 onClick={()=>{
                     setIsExpanded(!isExpanded)
+                    if (!streamer) {
+                        initiateStream()
+                    } else {
+                        setStreamer(null)
+                    }
                 }}
             ></button>
         </>
