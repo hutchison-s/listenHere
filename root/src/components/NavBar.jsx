@@ -16,7 +16,7 @@ function NavBar() {
       <nav id='navbar'>
         <div className="logo">
           <img src="/earpin.png" alt="Location pin with ear symbol" />
-          <h1>Listen Here</h1>
+          <h1>Listen&nbsp;Here</h1>
         </div>
         <button id="menuToggle" onClick={handleToggle}>
           <FontAwesomeIcon icon={faBars} />
