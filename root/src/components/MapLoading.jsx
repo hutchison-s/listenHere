@@ -11,6 +11,7 @@ export default function MapLoading() {
                         <div style={{flex: '1'}}></div><div className="inner-line" style={{flex: '1'}}></div>
                     </div>
                 ))}
+                <p>Accessing Location</p>
             </div>
         </div>
     )

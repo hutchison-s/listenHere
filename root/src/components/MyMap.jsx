@@ -4,7 +4,7 @@ import MapLoading from "./MapLoading"
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import { Icon } from 'leaflet';
 // later add TileLayer, Marker, Popup 
 
@@ -18,8 +18,9 @@ function MyMap() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
-
+    
   const [currentLocation, setCurrentLocation] = useState(null)
+  const [activePin, setActivePin] = useState(null)
 
   const youPin = new Icon({
     iconUrl: "./src/assets/person-rays-solid.svg",
@@ -31,12 +32,12 @@ function MyMap() {
     iconSize: [50, 50]
   });
 
-  const pins = [
-    {user: 1234, lat: 40.7378845, lng: -96.638, msg: "Hello There"},
-    {user: 1235, lat: 40.7376, lng: -96.640, msg: "Hello There"},
-    {user: 1236, lat: 40.73717, lng: -96.6503, msg: "Hello There"},
-    {user: 1237, lat: 40.73783, lng: -96.6429, msg: "Hello There"},
-  ]
+  const testPins = [
+    {id: 1234, lat: 40.7378845, lng: -96.638, msg: "Hello There"},
+    {id: 1235, lat: 40.7376, lng: -96.640, msg: "Welcome"},
+    {id: 1236, lat: 40.73717, lng: -96.6503, msg: "Happy New Year"},
+    {id: 1237, lat: 40.73783, lng: -96.6429, msg: "2024 is Here!"},
+]
 
   function onFound({coords}) {
     setCurrentLocation(coords)
@@ -44,6 +45,7 @@ function MyMap() {
   }
   function onError(err) {
     console.log(err)
+    alert("There seems to be a problem. Please ensure location is enabled and you have granted permission for this website to access location on your device.")
   }
   const watcher = navigator.geolocation.watchPosition(onFound, onError)
   const latlng = ()=>[currentLocation.latitude, currentLocation.longitude]
@@ -51,11 +53,37 @@ function MyMap() {
   return (
     <>
       {currentLocation 
-        ?   <MapContainer center={latlng()} zoom={16}>
-                <Marker position={latlng()} icon={youPin}/>
-                {pins.map(pin => (
-                    <Marker position={[pin.lat, pin.lng]} icon={earPin} key={pin.user}/>
+        ?   <MapContainer center={latlng()} zoom={18}>
+                {testPins.map(pin => (
+                    <Marker 
+                        position={[pin.lat, pin.lng]} 
+                        icon={earPin} 
+                        key={pin.id}
+                        eventHandlers={{
+                            click: ()=>{
+                                console.log(activePin)
+                                setActivePin(pin)
+                            },
+                            popupclose: ()=>{
+                                setActivePin(null)
+                            }
+                        }}
+                    />
                 ))}
+                {activePin && (
+                    <Popup 
+                        position={[activePin.lat, activePin.lng]}
+                        onClose={()=>{
+                            setActivePin(null)
+                        }}
+                    >
+                        <div>
+                            <h2>{activePin.id} says</h2>
+                            <p>{activePin.msg}</p>
+                        </div>
+                    </Popup>
+                )}
+                <Marker position={latlng()} icon={youPin} zIndexOffset={1000}/>
                 {<TileLayer
                     url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
