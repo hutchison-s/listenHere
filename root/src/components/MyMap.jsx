@@ -23,7 +23,7 @@ function MyMap() {
   const [activePin, setActivePin] = useState(null)
 
   const youPin = new Icon({
-    iconUrl: "./src/assets/person-rays-solid.svg",
+    iconUrl: "/person-rays-solid.svg",
     iconSize: [40, 40]
   });
 
