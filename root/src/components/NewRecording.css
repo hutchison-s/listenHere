@@ -19,24 +19,59 @@
     bottom: 1rem;
     left: 50%;
     translate: -50%;
-    height: 70vh;
+    height: 50vh;
     width: 90vw;
-    max-width: 0;
-    max-height: 0;
-    border-radius: 50%;
     overflow: hidden;
-    display: grid;
-    grid-template-rows: 1fr 4fr;
+    display: flex;
+    flex-direction: column;
     place-items: center;
     background-color: var(--teal);
+    transition: all 0.5s;
+    padding: 2rem;
+    gap: 2rem;
+}
+#recordingInterface.collapsed {
+    max-width: 0;
+    max-height: 0;
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-top-right-radius: 50%;
     transition: all 0.5s;
 }
 #recordingInterface.expanded {
     max-width: 400px;
     max-height: 1000px;
-    
+    transition: all 0.5s;
     border-bottom-left-radius: 50vw;
     border-top-left-radius: 1rem;
     border-bottom-right-radius: 50vw;
     border-top-right-radius: 1rem;
+}
+#postRecording {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+#dropRecording,
+#deleteRecording {
+    width: 6rem;
+    height: 2rem;
+    border: 1px solid var(--softwhite);
+    background: transparent;
+    color: var(--yellow);
+}
+#recordStart {
+    color: var(--softwhite);
+    background-color: transparent;
+    border-radius: 50%;
+    padding: 1rem;
+    width: 6rem;
+    aspect-ratio: 1;
+    border: 1px solid var(--softwhite);
+    font-size: 3rem;
+}
+
+#recordStart.recording {
+    background-color: red;
 }
