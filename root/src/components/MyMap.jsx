@@ -20,7 +20,6 @@ function MyMap() {
   }, []);
     
   const [currentLocation, setCurrentLocation] = useState(null)
-  const [activePin, setActivePin] = useState(null)
 
   const youPin = new Icon({
     iconUrl: "/person-rays-solid.svg",
@@ -48,42 +47,26 @@ function MyMap() {
     alert("There seems to be a problem. Please ensure location is enabled and you have granted permission for this website to access location on your device.")
   }
   const watcher = navigator.geolocation.watchPosition(onFound, onError)
-  const latlng = ()=>[currentLocation.latitude, currentLocation.longitude]
 
   return (
     <>
       {currentLocation 
-        ?   <MapContainer center={latlng()} zoom={18}>
+        ?   <MapContainer center={[currentLocation.latitude, currentLocation.longitude]} zoom={18} zoomControl={false} dragging={false} doubleClickZoom={false} scrollWheelZoom={false}>
                 {testPins.map(pin => (
                     <Marker 
                         position={[pin.lat, pin.lng]} 
                         icon={earPin} 
                         key={pin.id}
-                        eventHandlers={{
-                            click: ()=>{
-                                console.log(activePin)
-                                setActivePin(pin)
-                            },
-                            popupclose: ()=>{
-                                setActivePin(null)
-                            }
-                        }}
-                    />
-                ))}
-                {activePin && (
-                    <Popup 
-                        position={[activePin.lat, activePin.lng]}
-                        onClose={()=>{
-                            setActivePin(null)
-                        }}
                     >
+                      <Popup>
                         <div>
-                            <h2>{activePin.id} says</h2>
-                            <p>{activePin.msg}</p>
+                            <h2>{pin.id} says</h2>
+                            <p>{pin.msg}</p>
                         </div>
-                    </Popup>
-                )}
-                <Marker position={latlng()} icon={youPin} zIndexOffset={1000}/>
+                      </Popup>
+                    </Marker>
+                ))}
+                <Marker position={[currentLocation.latitude, currentLocation.longitude]} icon={youPin} zIndexOffset={1000}/>
                 {<TileLayer
                     url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'

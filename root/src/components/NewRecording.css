@@ -1,0 +1,42 @@
+#dropNew {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    translate: -50%;
+    width: 5rem;
+    aspect-ratio: 1;
+    outline: 4px solid var(--jet);
+    border: 2px solid var(--yellow);
+    background-color: var(--teal);
+    box-shadow: 0 0 20px black;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: var(--softwhite);
+}
+
+#recordingInterface {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    translate: -50%;
+    height: 70vh;
+    width: 90vw;
+    max-width: 0;
+    max-height: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 1fr 4fr;
+    place-items: center;
+    background-color: var(--teal);
+    transition: all 0.5s;
+}
+#recordingInterface.expanded {
+    max-width: 400px;
+    max-height: 1000px;
+    
+    border-bottom-left-radius: 50vw;
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 50vw;
+    border-top-right-radius: 1rem;
+}
