@@ -1,0 +1,50 @@
+.outer {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+.inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 50vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    animation: rotate 0.7s steps(6, start) infinite;
+}
+.inner-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    translate: 0 -50%;
+    transform-origin: left;
+}
+.inner-line {
+    border-radius: 0.5rem;
+}
+.inner-box:nth-child(1) .inner-line {
+    background-color: var(--yellow-25);
+    opacity: 0.2
+}.inner-box:nth-child(2) .inner-line {
+    background-color: var(--yellow-25);
+    opacity: 0.5
+}
+.inner-box:nth-child(3) .inner-line {
+    background-color: var(--yellow-25);
+}
+.inner-box:nth-child(4) .inner-line {
+    background-color: var(--yellow-50);
+}
+.inner-box:nth-child(5) .inner-line {
+    background-color: var(--yellow);
+}
+
+@keyframes rotate {
+    from {rotate: 0deg}
+    to {rotate: 360deg}
+}
