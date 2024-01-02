@@ -19,7 +19,7 @@ export default function NewRecording({location, db, addPin}) {
                     const mediaRecorder = new MediaRecorder(stream)
                     mediaRecorder.ondataavailable = (e)=>{chunks.push(e.data)}
                     mediaRecorder.onstop = ()=>{
-                        const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+                        const blob = new Blob(chunks, { type: "audio/wav" });
                         setTempBlob(blob)
                         chunks.length = 0;
                         const audioURL = window.URL.createObjectURL(blob);
@@ -60,7 +60,18 @@ export default function NewRecording({location, db, addPin}) {
                             e.preventDefault()
                             console.log(tempBlob)
                             console.log(e.target.newDesc)
-                            addPin([...db, {id: Math.random(), user: 1234, title: e.target.newTitle.value, desc: e.target.newDesc.value, lat: location.latitude, lng: location.longitude, blob: tempBlob, likes: 0}]);
+                            const newPin = {
+                                id: Math.random(), 
+                                user: 1234, 
+                                title: e.target.newTitle.value, 
+                                desc: e.target.newDesc.value, 
+                                timestamp: new Date().toDateString(), 
+                                lat: location.latitude, 
+                                lng: location.longitude, 
+                                blob: tempBlob, 
+                                likes: 0
+                            }
+                            addPin([...db, newPin]);
                             setTempRecording(null); 
                             setTempBlob(null);
                             setIsExpanded(false);

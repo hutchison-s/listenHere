@@ -4,11 +4,9 @@ import MyMap from './components/MyMap'
 
 function App() {
 
-  
-
   return (
     <>
-      <NavBar/>
+      <section><NavBar/></section>
       <MyMap/>
     </>
   )

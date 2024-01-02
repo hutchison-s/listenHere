@@ -1,0 +1,9 @@
+#root {
+    display: grid;
+    grid-template-rows: 4rem calc(100vh - 4rem);
+    width: 100vw;
+    height: 100vh;
+}
+#root section {
+    position: relative;
+}

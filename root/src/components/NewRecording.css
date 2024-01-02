@@ -12,6 +12,7 @@
     border-radius: 50%;
     font-size: 2rem;
     color: var(--softwhite);
+    z-index: 1000;
 }
 #dropNew.open {
     background-color: var(--jet);
@@ -35,6 +36,7 @@
     transition: all 0.5s;
     padding: 2rem;
     gap: 2rem;
+    z-index: 1000;
 }
 #recordingInterface.collapsed {
     max-width: 0;
