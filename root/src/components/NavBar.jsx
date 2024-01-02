@@ -23,15 +23,21 @@ function NavBar() {
         </button>
         <div id="hiddenMenu" className={isExpanded ? "expanded" : ""}>
           <ul>
-            <a href="#">
+            <a href="/mysounds">
               <li>My Sounds</li>
             </a>
-            <a href="##">
+            <a href="/">
               <li>Map</li>
             </a>
-            <li>Connections</li>
-            <li>Account</li>
-            <li><FontAwesomeIcon icon={faCircleQuestion} /></li>
+            <a href="/connections">
+              <li>Connections</li>
+            </a>
+            <a href="/account">
+              <li>Account</li>
+            </a>
+            <a href="/help">
+              <li><FontAwesomeIcon icon={faCircleQuestion} /></li>
+            </a>
           </ul>
         </div>
       </nav>

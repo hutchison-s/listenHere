@@ -1,6 +1,6 @@
 import './MyMap.css'
-import MapLoading from "./MapLoading"
-import NewRecording from "./NewRecording"
+import MapLoading from "../components/MapLoading"
+import NewRecording from "../components/NewRecording"
 // eslint-disable-next-line no-unused-vars
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
