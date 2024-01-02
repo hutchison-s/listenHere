@@ -31,7 +31,6 @@ function LoginPage() {
 
   return (
     <>
-    <section><h1>ListenHere</h1></section>
       <section className='gridCenter' >
           
           <form style={{display: "grid", gap: "1rem"}} onSubmit={onSubmit}>

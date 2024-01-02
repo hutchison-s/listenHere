@@ -2,7 +2,7 @@ import './NavBar.css'
 import { useContext, useState } from 'react'
 import {UserContext} from '../contexts/UserContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faUser, faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 
 function NavBar() {
   const {user, logout} = useContext(UserContext)
@@ -15,32 +15,48 @@ function NavBar() {
   return (
     <header>
       <nav id='navbar'>
-        <div className="logo">
+        <div className="leftNav">
           <img src="/earpin.png" alt="Location pin with ear symbol" />
           <h1>Listen&nbsp;Here</h1>
         </div>
-        <div><small>Hello {user.name}</small></div>
-        <button id="menuToggle" onClick={handleToggle}>
-          <FontAwesomeIcon icon={faBars} />
-        </button>
+        <div className="rightNav">
+          {user.auth
+          ? (<>
+                <a href="/account" id='helloUser'>
+                    <FontAwesomeIcon icon={faUser}/>
+                    <small>{user.name}</small>
+                </a>
+             </>)
+          : null}
+          <button id="menuToggle" onClick={handleToggle}>
+            <FontAwesomeIcon icon={faBars} />
+          </button>
+        </div>
         <div id="hiddenMenu" className={isExpanded ? "expanded" : ""}>
           <ul>
-            <a href="/mysounds">
-              <li>My Sounds</li>
-            </a>
-            <a href="/">
-              <li>Map</li>
-            </a>
-            <a href="/connections">
-              <li>Connections</li>
-            </a>
-            <a href="/account">
-              <li>Account</li>
-            </a>
-              <li onClick={(e)=>{
-                e.preventDefault()
-                logout()
-              }}>Log Out</li>
+            {user.auth
+              ? (<>
+                  <a href="/mysounds">
+                    <li>My Sounds</li>
+                  </a>
+                  <a href="/">
+                    <li>Map</li>
+                  </a>
+                  <a href="/connections">
+                    <li>Connections</li>
+                  </a>
+                  <a href="/account">
+                    <li>Account</li>
+                  </a>
+                    <li onClick={(e)=>{
+                      e.preventDefault()
+                      logout()
+                    }}>Log Out</li>
+                </>)
+              : <a href="/">
+                <li>Log In</li>
+              </a> }
+            
             <a href="/help">
               <li><FontAwesomeIcon icon={faCircleQuestion} /></li>
             </a>

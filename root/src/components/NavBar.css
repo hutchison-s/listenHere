@@ -8,19 +8,39 @@
     border-bottom: 1px solid var(--jetlight);
     z-index: 2000;
 }
-.logo {
+#navBar a,
+.leftNav a,
+.rightNav a,
+#hiddenMenu a {
+    color: var(--softwhite);
+    text-decoration: none;
+    display: block;
+}
+.leftNav {
     display: flex;
     height: 100%;
     align-items: center;
     font-size: large;
 }
-.logo img {
+.leftNav img {
     height: 100%;
 }
-.logo h1 {
+.leftNav h1 {
     margin: 0;
     display: inline-block;
     font-size: 2rem;
+}
+.rightNav {
+    display: flex;
+    gap: 0.5rem;
+}
+#helloUser {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    font-size: medium;
+    padding-top: 0.3rem;
+    color: var(--lighter-75)
 }
 #menuToggle {
     background: transparent;
@@ -42,10 +62,6 @@
     max-height: 0;
     transition: max-height 0.3s;
     border: none;
-}
-#hiddenMenu a {
-    color: var(--softwhite);
-    text-decoration: none;
 }
 #hiddenMenu.expanded {
     max-height: 400px;

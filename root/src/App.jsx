@@ -39,7 +39,7 @@ function App() {
     },
     {
       path: "help",
-      element: user.auth ? <Help /> : <LoginPage/>,
+      element: <Help />,
       errorElement: <ErrorPage />
     },
   ]
@@ -47,7 +47,7 @@ function App() {
 
   return (
     <>
-      {user.auth && <NavBar/>}
+      <NavBar/>
       <RouterProvider router={router} />
 
     </>
