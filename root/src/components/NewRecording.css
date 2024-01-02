@@ -22,7 +22,7 @@
 }
 
 #recordingInterface {
-    position: absolute;
+    position: fixed;
     bottom: 1rem;
     left: 50%;
     translate: -50%;
