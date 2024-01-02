@@ -1,5 +1,6 @@
 import './MyMap.css'
 import MapLoading from "./MapLoading"
+import NewRecording from "./NewRecording"
 // eslint-disable-next-line no-unused-vars
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -51,7 +52,8 @@ function MyMap() {
   return (
     <>
       {currentLocation 
-        ?   <MapContainer center={[currentLocation.latitude, currentLocation.longitude]} zoom={18} zoomControl={false} dragging={false} doubleClickZoom={false} scrollWheelZoom={false}>
+        ?   <>
+              <MapContainer center={[currentLocation.latitude, currentLocation.longitude]} zoom={18} zoomControl={false} dragging={false} doubleClickZoom={false} scrollWheelZoom={false}>
                 {testPins.map(pin => (
                     <Marker 
                         position={[pin.lat, pin.lng]} 
@@ -72,8 +74,11 @@ function MyMap() {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
                 />}
             </MapContainer>
-        :   <MapLoading />
+            <NewRecording/>
+          </>
+        : <MapLoading />
       }
+      
     </>
   )
 }

@@ -1,11 +1,11 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: 400;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
   background-color: var(--jet);
   color: var(--softwhite);
 
-  --jet: #323031ff;
-  --jetlight: #3d3b3cff;
+  --jet: rgb(32, 29, 40);
+  --jetlight: rgb(40, 42, 56);
   --yellow: #FDCE1Bff;
   --yellow-25: #FDCE1B55;
   --yellow-50: #FDCE1B88;

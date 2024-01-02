@@ -19,11 +19,12 @@
 .logo h1 {
     margin: 0;
     display: inline-block;
+    font-size: 2rem;
 }
 #menuToggle {
-    background: var(--lighter-25);
+    background: transparent;
     color: var(--softwhite);
-    border: none;
+    border: 1px solid var(--lighter-50);
     box-shadow: 0 0 0.2rem var(--darker-25);
     width: 3rem;
     border-radius: 0.25rem;

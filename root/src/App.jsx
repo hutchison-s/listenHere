@@ -1,7 +1,6 @@
 import './App.css'
 import NavBar from "./components/NavBar"
 import MyMap from './components/MyMap'
-import NewRecording from './components/NewRecording'
 
 function App() {
 
@@ -11,7 +10,7 @@ function App() {
     <>
       <NavBar/>
       <MyMap/>
-      <NewRecording/>
+      
     </>
   )
 }
