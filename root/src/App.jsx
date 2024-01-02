@@ -6,35 +6,40 @@ import ErrorPage from './pages/ErrorPage';
 import Help from './pages/Help';
 import MyMap from './pages/MyMap'
 import MySounds from './pages/MySounds';
+import LoginPage from './pages/LoginPage';
+import { UserContext } from './contexts/UserContext'
+import {useContext} from 'react'
 import {createBrowserRouter,RouterProvider} from 'react-router-dom';
 
 
 function App() {
 
+  const { user } = useContext(UserContext)
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <MyMap />,
+      element: user.auth ? <MyMap /> : <LoginPage/>,
       errorElement: <ErrorPage />
     },
     {
       path: "mysounds",
-      element: <MySounds />,
+      element: user.auth ? <MySounds /> : <LoginPage/>,
       errorElement: <ErrorPage />
     },
     {
       path: "connections",
-      element: <Connections />,
+      element: user.auth ? <Connections /> : <LoginPage/>,
       errorElement: <ErrorPage />
     },
     {
       path: "account",
-      element: <Account />,
+      element: user.auth ? <Account /> : <LoginPage/>,
       errorElement: <ErrorPage />
     },
     {
       path: "help",
-      element: <Help />,
+      element: user.auth ? <Help /> : <LoginPage/>,
       errorElement: <ErrorPage />
     },
   ]
@@ -42,8 +47,9 @@ function App() {
 
   return (
     <>
-      <NavBar/>
+      {user.auth && <NavBar/>}
       <RouterProvider router={router} />
+
     </>
   )
 }
