@@ -12,7 +12,7 @@ function NavBar() {
   }
 
   return (
-    <>
+    <header>
       <nav id='navbar'>
         <div className="logo">
           <img src="/earpin.png" alt="Location pin with ear symbol" />
@@ -41,8 +41,7 @@ function NavBar() {
           </ul>
         </div>
       </nav>
-      
-    </>
+    </header>
   )
 }
 

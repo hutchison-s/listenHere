@@ -5,7 +5,8 @@
     height: 100vh;
     overflow: hidden;
 }
-#root section {
+#root > section,
+header {
     position: relative;
 }
 .gridCenter {
