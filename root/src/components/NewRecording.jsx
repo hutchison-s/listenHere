@@ -2,8 +2,9 @@ import "./NewRecording.css"
 import { useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons'
+import PropTypes from 'prop-types'
 
-export default function NewRecording() {
+export default function NewRecording({location, db, addPin}) {
     const [isExpanded, setIsExpanded] = useState(false)
     const [tempRecording, setTempRecording] = useState(null)
     const [tempBlob, setTempBlob] = useState(null)
@@ -53,10 +54,31 @@ export default function NewRecording() {
                 <h2>New Drop</h2>
                 {tempRecording && <audio src={tempRecording} controls></audio>}
                 {tempRecording
-                    ? (<div id="postRecording">
-                        <button id="dropRecording" onClick={()=>{console.log(tempBlob)}}>DROP</button>
-                        <button id="deleteRecording" onClick={()=>{setTempRecording(null); setTempBlob(null)}}>DELETE</button>
-                      </div>)
+                    ? (<form 
+                        id="postRecording" 
+                        onSubmit={(e)=>{
+                            e.preventDefault()
+                            console.log(tempBlob)
+                            console.log(e.target.newDesc)
+                            addPin([...db, {id: Math.random(), user: 1234, title: e.target.newTitle.value, desc: e.target.newDesc.value, lat: location.latitude, lng: location.longitude, blob: tempBlob, likes: 0}]);
+                            setTempRecording(null); 
+                            setTempBlob(null);
+                            setIsExpanded(false);
+                            setStreamer(null)
+                        }}
+                        onReset={(e)=>{
+                            e.preventDefault()
+                            e.target.reset()
+                            setTempRecording(null);
+                            setTempBlob(null)
+                            initiateStream()
+                        }}
+                        >
+                        <label htmlFor="newTitle">Title: <input type="text" name="newTitle" id="newTitle" required/></label>
+                        <label htmlFor="newDesc">Description: <textarea name="newDesc" id="newDesc" width="30" height="2"/></label>
+                        <button id="dropRecording" type="submit">DROP</button>
+                        <button id="deleteRecording" type="reset">DELETE</button>
+                      </form>)
                     : (<button id="recordStart" onClick={record} className={isRecording ? "recording" : ""}>
                     {isRecording ? <FontAwesomeIcon icon={faStop}/> : <FontAwesomeIcon icon={faMicrophone}/>}
                 </button>)}
@@ -69,6 +91,7 @@ export default function NewRecording() {
             <RecordingInterface/>
              <button 
                 id="dropNew"
+                className={isExpanded ? "open" : ""}
                 onClick={()=>{
                     setIsExpanded(!isExpanded)
                     if (!streamer) {
@@ -80,4 +103,10 @@ export default function NewRecording() {
             ></button>
         </>
     )
+}
+
+NewRecording.propTypes = {
+    location: PropTypes.object,
+    db: PropTypes.array,
+    addPin: PropTypes.func
 }

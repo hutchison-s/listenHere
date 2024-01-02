@@ -4,15 +4,15 @@
   background-color: var(--jet);
   color: var(--softwhite);
 
-  --jet: rgb(32, 29, 40);
-  --jetlight: rgb(40, 42, 56);
-  --yellow: #FDCE1Bff;
-  --yellow-25: #FDCE1B55;
-  --yellow-50: #FDCE1B88;
+  --jet: #201d28;
+  --jetlight: #282a38;
+  --yellow: #FFC857;
+  --yellow-25: #FFC85755;
+  --yellow-50: #FFC85788;
   --teal: #107e7dff;
   --teal-50: #107e7d88;
-  --poolside: #84b59fff;
-  --poolside-50: #84848488;
+  --poolside: #45F0DF;
+  --poolside-50: #45F0DF88;
   --lighter-25: #ffffff55;
   --lighter-50: #ffffff88;
   --lighter-75: #ffffffcc;

@@ -6,12 +6,18 @@
     width: 5rem;
     aspect-ratio: 1;
     outline: 4px solid var(--jet);
-    border: 2px solid var(--yellow);
+    border: 2px solid var(--poolside);
     background-color: var(--teal);
     box-shadow: 0 0 20px black;
     border-radius: 50%;
     font-size: 2rem;
     color: var(--softwhite);
+}
+#dropNew.open {
+    background-color: var(--jet);
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
 
 #recordingInterface {
@@ -50,8 +56,17 @@
 }
 #postRecording {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     justify-content: space-evenly;
+    gap: 1rem;
+}
+#postRecording label {
+    flex: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    text-align: right;
+    gap: 0.5rem;
 }
 #dropRecording,
 #deleteRecording {

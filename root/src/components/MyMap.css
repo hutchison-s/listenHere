@@ -20,3 +20,15 @@
     filter: invert(10%);
     position: relative;
 }
+.popupFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 1.2rem;
+}
+.likes span {
+    margin-left: 0.25rem;
+}
+.likes.liked {
+    color: red;
+}
