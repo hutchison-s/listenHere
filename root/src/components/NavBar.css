@@ -6,6 +6,7 @@
     padding: 0.5rem 0.5rem;
     justify-content: space-between;
     border-bottom: 1px solid var(--jetlight);
+    z-index: 2000;
 }
 .logo {
     display: flex;
@@ -37,7 +38,6 @@
     left: 0;
     width: 100%;
     background-color: var(--jet);
-    
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s;
