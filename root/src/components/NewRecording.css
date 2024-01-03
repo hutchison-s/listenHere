@@ -70,6 +70,10 @@
     grid-template-columns: 1fr 2fr;
     text-align: right;
     gap: 0.5rem;
+    font-size: 16px;
+}
+#postRecording input {
+    font-size: 16px;
 }
 #dropRecording,
 #deleteRecording {
