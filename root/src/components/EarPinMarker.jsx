@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
-import { useState } from 'react'
 import { Marker, Popup } from 'react-leaflet'
 import { Icon } from 'leaflet'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import AudioControlButton from './AudioControlButton'
 
 function EarPinMarker({pin, likeFunc, audioRef, setSrc}) {
 
@@ -11,19 +11,13 @@ function EarPinMarker({pin, likeFunc, audioRef, setSrc}) {
         iconUrl: "/earpin.png",
         iconSize: [50, 50]
       });
-
-      const [isPlaying, setIsPlaying] = useState(false)
-
-      audioRef.current.onended = ()=>{
-        setIsPlaying(false)
-      }
     return (
       <Marker 
         position={[pin.lat, pin.lng]} 
         icon={earPin} 
         eventHandlers={{
           popupopen: ()=>{setSrc(pin.blob); console.log("sent source")},
-          popupclose: ()=>{audioRef.current.pause(); setIsPlaying(false)}
+          popupclose: ()=>{audioRef.current.pause();}
         }}
       >
         <Popup>
@@ -33,10 +27,7 @@ function EarPinMarker({pin, likeFunc, audioRef, setSrc}) {
                 <h2>{pin.title}</h2>
                 <h3><em>{pin.user}</em></h3>
               </div>
-              <button id="pausePlay" onClick={()=>{
-              isPlaying ? audioRef.current.pause() : audioRef.current.play();
-              setIsPlaying((isPlaying)=>!isPlaying)
-            }}>{isPlaying ? <FontAwesomeIcon icon={faPause}/> : <FontAwesomeIcon icon={faPlay}/>}</button>
+              <AudioControlButton audioRef={audioRef}/>
             </div>
               <p>{pin.desc}</p>
             <div className='popupFooter'>

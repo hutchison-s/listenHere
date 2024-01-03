@@ -126,7 +126,7 @@ function MyMap() {
         </article>
       <AudioPlayer audioRef={audioRef} url={url}/>
       {currentLocation 
-        ? <NewRecording location={currentLocation} db={testPins} addPin={setTestPins}/> 
+        ? <NewRecording location={currentLocation} db={testPins} addPin={setTestPins} setSrc={setSrc} audioRef={audioRef}/> 
         : null
       }
     </>

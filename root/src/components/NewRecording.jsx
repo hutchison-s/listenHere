@@ -4,10 +4,10 @@ import {UserContext} from '../contexts/UserContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
+import AudioControlButton from "./AudioControlButton"
 
-export default function NewRecording({location, db, addPin}) {
+export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
     const [isExpanded, setIsExpanded] = useState(false)
-    const [tempRecording, setTempRecording] = useState(null)
     const [tempBlob, setTempBlob] = useState(null)
     const [isRecording, setIsRecording] = useState(false)
     const [streamer, setStreamer] = useState(null)
@@ -25,8 +25,7 @@ export default function NewRecording({location, db, addPin}) {
                         const blob = new Blob(chunks, { type: "audio/wav" });
                         setTempBlob(blob)
                         chunks.length = 0;
-                        const audioURL = window.URL.createObjectURL(blob);
-                        setTempRecording(audioURL)
+                        setSrc(blob);
                     }
                     setStreamer(mediaRecorder)
                     console.log(mediaRecorder)
@@ -50,54 +49,61 @@ export default function NewRecording({location, db, addPin}) {
                 setIsRecording(true)
             }
     }
+    const onSubmit = (e)=>{
+        e.preventDefault()
+        console.log(tempBlob)
+        console.log(e.target.newDesc)
+        const newPin = {
+            id: Math.random(), 
+            user: user.name, 
+            title: e.target.newTitle.value, 
+            desc: e.target.newDesc.value, 
+            timestamp: new Date().toDateString(), 
+            lat: location[0], 
+            lng: location[1], 
+            blob: tempBlob, 
+            likes: 0
+        }
+        addPin([...db, newPin]);
+        setTempBlob(null);
+        setIsExpanded(false);
+        setStreamer(null)
+    }
+
+    const onReset = (e)=>{
+        e.preventDefault()
+        e.target.reset()
+        setTempBlob(null)
+        initiateStream()
+    }
 
     function RecordingInterface() {
         return ( 
             <div id="recordingInterface" className={isExpanded ? "expanded" : "collapsed"}>
                 <h2>New Drop</h2>
-                {tempRecording
+                {tempBlob
                     ? <>
-                        <audio src={tempRecording} controls preload="auto"></audio>
+                        <AudioControlButton audioRef={audioRef}/>
                         <form 
                             id="postRecording" 
-                            onSubmit={(e)=>{
-                                e.preventDefault()
-                                console.log(tempBlob)
-                                console.log(e.target.newDesc)
-                                const newPin = {
-                                    id: Math.random(), 
-                                    user: user.name, 
-                                    title: e.target.newTitle.value, 
-                                    desc: e.target.newDesc.value, 
-                                    timestamp: new Date().toDateString(), 
-                                    lat: location[0], 
-                                    lng: location[1], 
-                                    blob: tempBlob, 
-                                    likes: 0
-                                }
-                                addPin([...db, newPin]);
-                                setTempRecording(null); 
-                                setTempBlob(null);
-                                setIsExpanded(false);
-                                setStreamer(null)
-                            }}
-                            onReset={(e)=>{
-                                e.preventDefault()
-                                e.target.reset()
-                                setTempRecording(null);
-                                setTempBlob(null)
-                                initiateStream()
-                            }}
-                            >
+                            onSubmit={onSubmit}
+                            onReset={onReset}
+                        >
                             <label htmlFor="newTitle">Title: <input type="text" name="newTitle" id="newTitle" required/></label>
                             <label htmlFor="newDesc">Description: <textarea name="newDesc" id="newDesc" width="30" height="2"/></label>
                             <button id="dropRecording" type="submit">DROP</button>
                             <button id="deleteRecording" type="reset">DELETE</button>
                         </form>
                       </>
-                    : (<button id="recordStart" onClick={record} className={isRecording ? "recording" : ""}>
-                    {isRecording ? <FontAwesomeIcon icon={faStop}/> : <FontAwesomeIcon icon={faMicrophone}/>}
-                </button>)}
+                    : (
+                        <button 
+                            id="recordStart" 
+                            onClick={record} 
+                            className={isRecording ? "recording" : ""}
+                        >
+                            {isRecording ? <FontAwesomeIcon icon={faStop}/> : <FontAwesomeIcon icon={faMicrophone}/>}
+                        </button>
+                    )}
             </div>)
     }
 
@@ -123,5 +129,7 @@ export default function NewRecording({location, db, addPin}) {
 NewRecording.propTypes = {
     location: PropTypes.array,
     db: PropTypes.array,
-    addPin: PropTypes.func
+    addPin: PropTypes.func,
+    setSrc: PropTypes.func,
+    audioRef: PropTypes.object
 }
