@@ -1,5 +1,6 @@
 import "./NewRecording.css"
-import { useState } from "react"
+import { useState, useContext } from "react"
+import {UserContext} from '../contexts/UserContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
@@ -11,6 +12,8 @@ export default function NewRecording({location, db, addPin}) {
     const [isRecording, setIsRecording] = useState(false)
     const [streamer, setStreamer] = useState(null)
     const chunks = [];
+
+    const {user} = useContext(UserContext)
 
     function initiateStream() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -63,7 +66,7 @@ export default function NewRecording({location, db, addPin}) {
                                 console.log(e.target.newDesc)
                                 const newPin = {
                                     id: Math.random(), 
-                                    user: 1234, 
+                                    user: user.name, 
                                     title: e.target.newTitle.value, 
                                     desc: e.target.newDesc.value, 
                                     timestamp: new Date().toDateString(), 
