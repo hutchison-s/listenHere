@@ -22,7 +22,7 @@ export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
                     const mediaRecorder = new MediaRecorder(stream)
                     mediaRecorder.ondataavailable = (e)=>{chunks.push(e.data)}
                     mediaRecorder.onstop = ()=>{
-                        const blob = new Blob(chunks, { type: "audio/wav" });
+                        const blob = new Blob(chunks, { type: "audio/mpeg3" });
                         setTempBlob(blob)
                         chunks.length = 0;
                         setSrc(blob);
