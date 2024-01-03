@@ -6,7 +6,7 @@ function LoginPage() {
     const [name, setName] = useState(null)
     const [pass, setPass] = useState(null)
 
-    const {login} = useContext(UserContext)
+    const {user, login, setUser} = useContext(UserContext)
 
     const onSubmit = (e)=>{
         e.preventDefault()
@@ -14,18 +14,20 @@ function LoginPage() {
     }
 
     useEffect(()=>{
-      let user = null;
-      try {
-        if (localStorage["listenUser"]) {
-          let item = localStorage.getItem("listenUser")
-          user = JSON.parse(item)
+      if (!user.auth) {
+        let user = null;
+        try {
+          if (localStorage["listenUser"]) {
+            let item = localStorage.getItem("listenUser")
+            user = JSON.parse(item)
+            if (user) {
+              console.log("autologin" , user)
+              setUser(user)
+            }
+          }
+        } catch (err) {
+          console.log(err)
         }
-      } catch (err) {
-        console.log(err)
-      }
-      if (user) {
-        console.log("autologin" , user)
-        login(user)
       }
     }, [])
 

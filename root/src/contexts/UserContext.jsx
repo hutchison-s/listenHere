@@ -5,7 +5,7 @@ export const UserContext = createContext()
 // eslint-disable-next-line react/prop-types
 export const UserProvider = ({children}) => {
 
-    const [user, setUser] = useState({user: {}, auth: false})
+    const [user, setUser] = useState({user: "", auth: false})
 
     const userDB = {
         "Steven": "password"
@@ -19,7 +19,7 @@ export const UserProvider = ({children}) => {
                 auth: true
             }
             setUser(obj)
-            localStorage.setItem("listenUser", JSON.stringify({name: creds.name, pass: creds.pass}))
+            localStorage.setItem("listenUser", JSON.stringify(obj))
         } else {
             setUser({
                 name: '',
@@ -34,11 +34,11 @@ export const UserProvider = ({children}) => {
             name: '',
             auth: false
         })
-        localStorage.setItem("listenUser", "")
+        localStorage.removeItem("listenUser")
     }
     
     return (
-        <UserContext.Provider value={{user, login, logout}}>
+        <UserContext.Provider value={{user, login, logout, setUser}}>
             {children}
         </UserContext.Provider>
 
