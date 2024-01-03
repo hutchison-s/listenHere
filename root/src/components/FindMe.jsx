@@ -17,7 +17,10 @@ const FindMe = ({currentLocation}) => {
         height: '40px',
         cursor: 'pointer',
         fontSize: "22px",
-        fontWeight: '200'
+        fontWeight: '200',
+        textAlign: 'center',
+        aspectRatio: '1',
+        textDecoration: 'none'
     }
   return (
     <button id='findMe' onClick={onClick} style={style}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
