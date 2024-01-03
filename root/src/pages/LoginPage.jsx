@@ -33,23 +33,23 @@ function LoginPage() {
 
   return (
     <>
-      <section className='gridCenter' >
+      <article className='gridCenter' >
           
-          <form style={{display: "grid", gap: "1rem"}} onSubmit={onSubmit}>
+          <form id="loginForm" onSubmit={onSubmit}>
             <p>Log in to continue</p>
-            <label htmlFor="newUsername" style={{display: "grid", gap: "1rem", gridTemplateColumns: "3fr 7fr"}}>Name: 
+            <label htmlFor="newUsername" >Name: 
             <input type="text" name="newUserName" id="newUserName" onChange={(e)=>{
               setName(e.target.value)
             }}/>
             </label>
-            <label htmlFor="newPassword" style={{display: "grid", gap: "1rem", gridTemplateColumns: "3fr 7fr"}}>Password: 
+            <label htmlFor="newPassword" >Password: 
             <input type="password" name="newPassword" id="newPassword" onChange={(e)=>{
               setPass(e.target.value)
             }}/>
             </label>
             <button type='submit'>Log In</button>
           </form>
-      </section>
+      </article>
     </>
   )
 }

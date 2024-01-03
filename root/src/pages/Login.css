@@ -1,0 +1,32 @@
+#newUserName,
+#newPassword {
+    font-size: 16px;
+    background-color: var(--darker-25);
+    color: var(--softwhite);
+    border: 1px solid var(--softwhite);
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.25rem;
+}
+
+#loginForm {
+    display: grid;
+    gap: 1rem;
+    font-size: 16px;
+}
+#loginForm p {
+    font-size: 16px;
+}
+#loginForm > label {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 3fr 7fr
+}
+#loginForm button[type='submit'] {
+    background-color: var(--teal);
+    color: var(--softwhite);
+    border: 1px solid var(--softwhite);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    width: clamp(4rem, 100%, 10rem);
+    margin: auto;
+}
