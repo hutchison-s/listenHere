@@ -72,6 +72,8 @@ function MyMap() {
       let yMoved = Math.abs(Math.abs(currentLocation[1])-Math.abs(longitude)) > threshold
       if (xMoved || yMoved) {
         setCurrentLocation([latitude, longitude])
+      } else {
+        console.log("minimal movement prevented")
       }
     } else {
       setCurrentLocation([latitude, longitude])
