@@ -109,19 +109,21 @@ function MyMap() {
 
   return (
     <>
-      {!currentLocation && <MapLoading/>}
-      <MapContainer center={[41.7378961, -96.0426487]} zoom={18} minZoom={14} >
-        <MapController currentLocation={currentLocation} />
-        <FindMe currentLocation={currentLocation}/>
-        <YouAreHere currentLocation={currentLocation} />
-        {testPins && testPins.map(pin=>
-          <EarPinMarker key={pin.id} pin={pin} likeFunc={incLikes} audioRef={audioRef} setSrc={setSrc}/>
-        )}
-        <TileLayer
-          url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-        />
-      </MapContainer>
+      {!currentLocation && <article className='gridCenter'><MapLoading/></article>}
+        <article>
+          <MapContainer center={[41.7378961, -96.0426487]} zoom={18} minZoom={14} >
+            <MapController currentLocation={currentLocation} />
+            <FindMe currentLocation={currentLocation}/>
+            <YouAreHere currentLocation={currentLocation} />
+            {testPins && testPins.map(pin=>
+              <EarPinMarker key={pin.id} pin={pin} likeFunc={incLikes} audioRef={audioRef} setSrc={setSrc}/>
+            )}
+            <TileLayer
+              url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+            />
+          </MapContainer>
+        </article>
       <AudioPlayer audioRef={audioRef} url={url}/>
       {currentLocation 
         ? <NewRecording location={currentLocation} db={testPins} addPin={setTestPins}/> 

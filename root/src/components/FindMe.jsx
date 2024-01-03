@@ -6,7 +6,7 @@ import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
 const FindMe = ({currentLocation}) => {
     const map = useMap()
     const onClick = ()=>{
-        map.flyTo(currentLocation, 18, {animate: true, duration: 0.5})
+        map.panTo(currentLocation,{animate: true, duration: 0.5})
     }
     const style = {
         zIndex: "1000",
