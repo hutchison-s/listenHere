@@ -16,47 +16,41 @@ function NavBar() {
     <header>
       <nav id='navbar'>
         <div className="leftNav">
-          <img src="/earpin.png" alt="Location pin with ear symbol" />
-          <h1>ListenHere</h1>
+          
+            <a href="/">
+              <img src="/earpin.png" alt="Location pin with ear symbol" />
+            </a>
+            <a href="/">
+              <h1>ListenHere</h1>
+            </a>
         </div>
         <div className="rightNav">
-          {user.auth
-          ? (<>
-                <a href="/account" id='helloUser'>
-                    <FontAwesomeIcon icon={faUser}/>
-                    <small>{user.name}</small>
-                </a>
-             </>)
-          : null}
+          <a href="/account" id='helloUser'>
+              <FontAwesomeIcon icon={faUser}/>
+              <small>{user.name}</small>
+          </a>
           <button id="menuToggle" onClick={handleToggle}>
             <FontAwesomeIcon icon={faBars} />
           </button>
         </div>
         <div id="hiddenMenu" className={isExpanded ? "expanded" : ""}>
           <ul>
-            {user.auth
-              ? (<>
-                  <a href="/mysounds">
-                    <li>My Sounds</li>
-                  </a>
-                  <a href="/">
-                    <li>Map</li>
-                  </a>
-                  <a href="/connections">
-                    <li>Connections</li>
-                  </a>
-                  <a href="/account">
-                    <li>Account</li>
-                  </a>
-                    <li onClick={(e)=>{
-                      e.preventDefault()
-                      logout()
-                    }}>Log Out</li>
-                </>)
-              : <a href="/">
-                <li>Log In</li>
-              </a> }
-            
+            <a href="/mysounds">
+              <li>My Sounds</li>
+            </a>
+            <a href="/">
+              <li>Map</li>
+            </a>
+            <a href="/connections">
+              <li>Connections</li>
+            </a>
+            <a href="/account">
+              <li>Account</li>
+            </a>
+              <li onClick={(e)=>{
+                e.preventDefault()
+                logout()
+              }}>Log Out</li>
             <a href="/help">
               <li><FontAwesomeIcon icon={faCircleQuestion} /></li>
             </a>

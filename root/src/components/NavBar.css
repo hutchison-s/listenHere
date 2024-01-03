@@ -10,8 +10,6 @@
     border-bottom: 1px solid var(--jetlight);
     z-index: 2000;
 }
-#navBar a,
-.leftNav a,
 .rightNav a,
 #hiddenMenu a {
     color: var(--softwhite);
@@ -31,6 +29,11 @@
     margin: 0;
     display: inline-block;
     font-size: 2rem;
+}
+.leftNav a {
+    height: 100%;
+    color: var(--softwhite);
+    text-decoration: none;
 }
 .rightNav {
     display: flex;

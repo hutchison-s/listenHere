@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage';
 import { UserContext } from './contexts/UserContext'
 import {useContext} from 'react'
 import {createBrowserRouter,RouterProvider} from 'react-router-dom';
+import NavBarNoAuth from './components/NavBarNoAuth';
 
 
 function App() {
@@ -47,7 +48,7 @@ function App() {
 
   return (
     <>
-      <NavBar/>
+      {user.auth ? <NavBar/> : <NavBarNoAuth />}
       <RouterProvider router={router} />
 
     </>
