@@ -20,7 +20,6 @@
     border-left: none;
     border-right: none;
 }
-
 #recordingInterface {
     position: fixed;
     bottom: 1rem;
@@ -45,17 +44,19 @@
     border-top-left-radius: 50%;
     border-bottom-right-radius: 50%;
     border-top-right-radius: 50%;
-    transition: all 0.5s;
+    transition: all 0.2s;
 }
+
 #recordingInterface.expanded {
-    max-width: 400px;
+    max-width: 400px; 
     max-height: 1000px;
-    transition: all 0.5s;
     border-bottom-left-radius: 50vw;
     border-top-left-radius: 1rem;
     border-bottom-right-radius: 50vw;
     border-top-right-radius: 1rem;
+    transition: all 0.2s;
 }
+
 #postRecording {
     display: flex;
     flex-wrap: wrap;

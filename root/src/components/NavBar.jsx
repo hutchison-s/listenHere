@@ -17,7 +17,7 @@ function NavBar() {
       <nav id='navbar'>
         <div className="leftNav">
           <img src="/earpin.png" alt="Location pin with ear symbol" />
-          <h1>Listen&nbsp;Here</h1>
+          <h1>ListenHere</h1>
         </div>
         <div className="rightNav">
           {user.auth

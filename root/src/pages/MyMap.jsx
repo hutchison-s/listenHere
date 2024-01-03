@@ -1,60 +1,25 @@
 import './MyMap.css'
-import MapLoading from "../components/MapLoading"
-import NewRecording from "../components/NewRecording"
 // eslint-disable-next-line no-unused-vars
-import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-import { Icon } from 'leaflet';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types'
+import MapLoading from '../components/MapLoading';
+import YouAreHere from '../components/YouAreHere';
+import EarPinMarker from '../components/EarPinMarker';
+import MapController from '../components/MapController';
+import NewRecording from '../components/NewRecording';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer} from 'react-leaflet';
 
 // Main Component
 function MyMap() {
 
-  // State
   const [currentLocation, setCurrentLocation] = useState(null)
   const [testPins, setTestPins] = useState([])
 
-  // Populate testPins db on load and clear geolocation watcher on unload
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      navigator.geolocation.clearWatch(watcher)
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
+  useEffect(()=>{
     initPins()
+    return navigator.geolocation.clearWatch(watcher)
+  }, [])
 
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-  
-  // Geolocation Watcher & callbacks
-  const watcher = navigator.geolocation.watchPosition(onFound, onError)
-
-  function onFound({coords}) {
-    if (currentLocation) { // Eliminate state change for minimal movement
-      const latDelta = Math.abs(Math.abs(coords.latitude) - Math.abs(currentLocation.latitude))
-      const lngDelta = Math.abs(Math.abs(coords.longitude) - Math.abs(currentLocation.longitude))
-      if (latDelta > 0.0001 || lngDelta > 0.0001) {
-        setCurrentLocation(coords)
-        console.log("threshold reached", coords.latitude, coords.longitude)
-      } else {
-        console.log("minimal movement", coords.latitude, coords.longitude)
-      }
-    } else {
-      setCurrentLocation(coords)
-      console.log("location found", coords.latitude, coords.longitude)
-    }
-  }
-  function onError(err) {
-    console.log(err)
-    alert("There seems to be a problem. Please ensure location is enabled and you have granted permission for this website to access location on your device.")
-  }
-  
-  // Create two default pins for testing
   async function initPins() {
     const newPins = [];
     await fetch("./init1.wav")
@@ -73,6 +38,7 @@ function MyMap() {
           likes: 0
         }
         newPins.push(curPin)
+        
       })
       .catch (err => {console.log(err)})
     await fetch("./init2.mp3")
@@ -91,22 +57,31 @@ function MyMap() {
           likes: 1
         }
         newPins.push(curPin)
+        
       })
+      console.log(newPins)
     setTestPins(newPins)
   }
+  const watcher = navigator.geolocation.watchPosition(onFound, onError)
 
-  // Marker icons
-  const youPin = new Icon({
-    iconUrl: "/person-rays-solid.svg",
-    iconSize: [30, 30]
-  });
+  function onFound ({coords}) {
+    const {latitude, longitude} = coords;
+    let threshold = 0.00003;
+    if (currentLocation) {
+      let xMoved = Math.abs(Math.abs(currentLocation[0])-Math.abs(latitude)) > threshold
+      let yMoved = Math.abs(Math.abs(currentLocation[1])-Math.abs(longitude)) > threshold
+      if (xMoved || yMoved) {
+        setCurrentLocation([latitude, longitude])
+      }
+    } else {
+      setCurrentLocation([latitude, longitude])
+      console.log("setting initial location state")
+    }
+  }
+  function onError(err) {
+    console.log(err)
+  }
 
-  const earPin = new Icon({
-    iconUrl: "/earpin.png",
-    iconSize: [50, 50]
-  });
-
-  // Earpin functions
   function incLikes(id) {
     const pins = [...testPins]
     pins.forEach(pin => {
@@ -117,58 +92,24 @@ function MyMap() {
     setTestPins(pins)
   }
 
-  // Earpin component
-  function EarPinMarker({pin}) {
-    return (
-      <Marker 
-        position={[pin.lat, pin.lng]} 
-        icon={earPin} 
-        onClick={(e)=>{e.originalEvent.preventDefault()}}
-      >
-        <Popup>
-          <div>
-            <h2>{pin.title}</h2>
-            <div>
-              <h3><em>{pin.user}</em></h3>
-              <p>{pin.desc}</p>
-            </div>
-            <audio src={window.URL.createObjectURL(pin.blob)} controls></audio>
-            <div className='popupFooter'>
-              <p><small>{pin.timestamp}</small></p>
-              <div className={pin.likes > 0 ? "likes liked" : "likes"}>
-                <FontAwesomeIcon icon={faHeart} onClick={()=>{incLikes(pin.id)}}/>
-                <span>{pin.likes}</span>
-              </div>
-            </div>
-          </div>
-        </Popup>
-      </Marker>
-    )
-  }
-  EarPinMarker.propTypes = {
-    pin: PropTypes.object
-  }
-
   return (
     <>
+      {!currentLocation && <MapLoading/>}
+      <MapContainer center={[41.7378961, -96.0426487]} zoom={18} minZoom={14} >
+        <MapController currentLocation={currentLocation} />
+        <YouAreHere currentLocation={currentLocation} />
+        {testPins && testPins.map(pin=>
+          <EarPinMarker key={pin.id} pin={pin} likeFunc={incLikes}/>
+        )}
+        <TileLayer
+          url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        />
+      </MapContainer>
       {currentLocation 
-        ?   <>
-              <MapContainer center={[currentLocation.latitude, currentLocation.longitude]} zoom={18} minZoom={14}> {/* Map currently reloads on movement, potential problems with listening while moving */}
-                {testPins.map(pin => (
-                    <EarPinMarker pin={pin} key={pin.id}/>
-                ))}
-                <Marker position={[currentLocation.latitude, currentLocation.longitude]} icon={youPin} zIndexOffset={1000}/> {/* You are here */}
-                {<TileLayer
-                    url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-                />}
-                
-            </MapContainer>
-            <NewRecording location={currentLocation} db={testPins} addPin={setTestPins}/> {/* Bottom button & recording interface */}
-          </>
-        : <MapLoading />
+        ? <NewRecording location={currentLocation} db={testPins} addPin={setTestPins}/> 
+        : null
       }
-      
     </>
   )
 }

@@ -49,52 +49,53 @@ export default function NewRecording({location, db, addPin}) {
     }
 
     function RecordingInterface() {
-        return (
+        return ( 
             <div id="recordingInterface" className={isExpanded ? "expanded" : "collapsed"}>
                 <h2>New Drop</h2>
-                {tempRecording && <audio src={tempRecording} controls></audio>}
                 {tempRecording
-                    ? (<form 
-                        id="postRecording" 
-                        onSubmit={(e)=>{
-                            e.preventDefault()
-                            console.log(tempBlob)
-                            console.log(e.target.newDesc)
-                            const newPin = {
-                                id: Math.random(), 
-                                user: 1234, 
-                                title: e.target.newTitle.value, 
-                                desc: e.target.newDesc.value, 
-                                timestamp: new Date().toDateString(), 
-                                lat: location.latitude, 
-                                lng: location.longitude, 
-                                blob: tempBlob, 
-                                likes: 0
-                            }
-                            addPin([...db, newPin]);
-                            setTempRecording(null); 
-                            setTempBlob(null);
-                            setIsExpanded(false);
-                            setStreamer(null)
-                        }}
-                        onReset={(e)=>{
-                            e.preventDefault()
-                            e.target.reset()
-                            setTempRecording(null);
-                            setTempBlob(null)
-                            initiateStream()
-                        }}
-                        >
-                        <label htmlFor="newTitle">Title: <input type="text" name="newTitle" id="newTitle" required/></label>
-                        <label htmlFor="newDesc">Description: <textarea name="newDesc" id="newDesc" width="30" height="2"/></label>
-                        <button id="dropRecording" type="submit">DROP</button>
-                        <button id="deleteRecording" type="reset">DELETE</button>
-                      </form>)
+                    ? <>
+                        <audio src={tempRecording} controls preload="auto"></audio>
+                        <form 
+                            id="postRecording" 
+                            onSubmit={(e)=>{
+                                e.preventDefault()
+                                console.log(tempBlob)
+                                console.log(e.target.newDesc)
+                                const newPin = {
+                                    id: Math.random(), 
+                                    user: 1234, 
+                                    title: e.target.newTitle.value, 
+                                    desc: e.target.newDesc.value, 
+                                    timestamp: new Date().toDateString(), 
+                                    lat: location[0], 
+                                    lng: location[1], 
+                                    blob: tempBlob, 
+                                    likes: 0
+                                }
+                                addPin([...db, newPin]);
+                                setTempRecording(null); 
+                                setTempBlob(null);
+                                setIsExpanded(false);
+                                setStreamer(null)
+                            }}
+                            onReset={(e)=>{
+                                e.preventDefault()
+                                e.target.reset()
+                                setTempRecording(null);
+                                setTempBlob(null)
+                                initiateStream()
+                            }}
+                            >
+                            <label htmlFor="newTitle">Title: <input type="text" name="newTitle" id="newTitle" required/></label>
+                            <label htmlFor="newDesc">Description: <textarea name="newDesc" id="newDesc" width="30" height="2"/></label>
+                            <button id="dropRecording" type="submit">DROP</button>
+                            <button id="deleteRecording" type="reset">DELETE</button>
+                        </form>
+                      </>
                     : (<button id="recordStart" onClick={record} className={isRecording ? "recording" : ""}>
                     {isRecording ? <FontAwesomeIcon icon={faStop}/> : <FontAwesomeIcon icon={faMicrophone}/>}
                 </button>)}
-            </div>
-        )
+            </div>)
     }
 
     return (
@@ -117,7 +118,7 @@ export default function NewRecording({location, db, addPin}) {
 }
 
 NewRecording.propTypes = {
-    location: PropTypes.object,
+    location: PropTypes.array,
     db: PropTypes.array,
     addPin: PropTypes.func
 }
