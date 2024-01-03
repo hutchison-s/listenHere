@@ -2,8 +2,10 @@
     display: grid;
     grid-template-rows: 4rem calc(100vh - 4rem);
     width: 100vw;
+    max-width: 1000px;
     height: 100vh;
     overflow: hidden;
+    margin: auto;
 }
 #root > section,
 header {

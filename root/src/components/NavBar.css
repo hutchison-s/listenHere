@@ -1,6 +1,8 @@
 #navbar {
     position: fixed;
     width: 100vw;
+    max-width: 1000px;
+    margin: auto;
     height: 4rem;
     display: flex;
     padding: 0.5rem 0.5rem;
