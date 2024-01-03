@@ -6,19 +6,31 @@ import YouAreHere from '../components/YouAreHere';
 import EarPinMarker from '../components/EarPinMarker';
 import MapController from '../components/MapController';
 import NewRecording from '../components/NewRecording';
-import { useEffect, useState } from 'react';
+import AudioPlayer from '../components/AudioPlayer';
+import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer} from 'react-leaflet';
+
 
 // Main Component
 function MyMap() {
 
   const [currentLocation, setCurrentLocation] = useState(null)
   const [testPins, setTestPins] = useState([])
+  const [src, setSrc] = useState(null)
+  const [url, setUrl] = useState(null)
+  const audioRef = useRef()
 
   useEffect(()=>{
     initPins()
     return navigator.geolocation.clearWatch(watcher)
   }, [])
+    useEffect(()=>{
+        if (src) {
+          let str = window.URL.createObjectURL(src)
+            setUrl(str)
+            console.log("source is set to", str)
+        }
+    }, [src])
 
   async function initPins() {
     const newPins = [];
@@ -101,13 +113,14 @@ function MyMap() {
         <MapController currentLocation={currentLocation} />
         <YouAreHere currentLocation={currentLocation} />
         {testPins && testPins.map(pin=>
-          <EarPinMarker key={pin.id} pin={pin} likeFunc={incLikes}/>
+          <EarPinMarker key={pin.id} pin={pin} likeFunc={incLikes} audioRef={audioRef} setSrc={setSrc}/>
         )}
         <TileLayer
           url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
         />
       </MapContainer>
+      <AudioPlayer audioRef={audioRef} url={url}/>
       {currentLocation 
         ? <NewRecording location={currentLocation} db={testPins} addPin={setTestPins}/> 
         : null

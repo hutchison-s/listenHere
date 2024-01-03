@@ -7,15 +7,36 @@
     filter: invert(10%);
     position: relative;
 }
+.leaflet-popup-content {
+    min-width: 8rem;
+}
+.popupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
 .popupFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 1.2rem;
 }
+
 .likes span {
     margin-left: 0.25rem;
 }
 .likes.liked {
     color: red;
+}
+#pausePlay {
+    border-radius: 50%;
+    border: 2px solid var(--teal);
+    margin: auto;
+    background-color: transparent;
+    font-size: large;
+    color: var(--teal);
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
 }
