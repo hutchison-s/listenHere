@@ -9,6 +9,7 @@ import NewRecording from '../components/NewRecording';
 import AudioPlayer from '../components/AudioPlayer';
 import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer} from 'react-leaflet';
+import FindMe from '../components/FindMe';
 
 
 // Main Component
@@ -111,6 +112,7 @@ function MyMap() {
       {!currentLocation && <MapLoading/>}
       <MapContainer center={[41.7378961, -96.0426487]} zoom={18} minZoom={14} >
         <MapController currentLocation={currentLocation} />
+        <FindMe currentLocation={currentLocation}/>
         <YouAreHere currentLocation={currentLocation} />
         {testPins && testPins.map(pin=>
           <EarPinMarker key={pin.id} pin={pin} likeFunc={incLikes} audioRef={audioRef} setSrc={setSrc}/>
