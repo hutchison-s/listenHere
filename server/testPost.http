@@ -1,0 +1,10 @@
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "fullName": "Steven Hutchison", 
+    "email": "hutchison.music@gmail.com", 
+    "displayName": "HutchisonMusic", 
+    "bio": "Just a developer who loves music... or is it the other way around?"
+}
+
