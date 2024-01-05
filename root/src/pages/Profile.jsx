@@ -35,7 +35,7 @@ function Profile() {
     }, [])
 
     function connect() {
-        axios.post("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"connect", {userId: profile._id})
+        axios.post("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"/connect", {userId: profile._id})
             .then(res => {
                 console.log(res.status, "successful connection")
             }).catch(err => {
@@ -44,7 +44,7 @@ function Profile() {
     }
 
     function disconnect() {
-        axios.patch("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"connect", {userId: profile._id})
+        axios.put("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"/disconnect", {userId: profile._id})
             .then(res => {
                 console.log(res.status, "successful disconnect")
             }).catch(err => {

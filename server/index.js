@@ -339,7 +339,7 @@ app.post('/users/:id/connect', async (req, res) => {
 
 // Remove user connection
 
-app.patch('/users/:id/connect', async (req, res) => {
+app.put('/users/:id/disconnect', async (req, res) => {
     const { id } = req.params
     const { userId } = req.body
 
