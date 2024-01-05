@@ -40,7 +40,7 @@ export const UserProvider = ({children}) => {
             viewed: [],
             connections: []
         }
-        axios.post('https://listen-here-api.onrender.com/', newUserObject)
+        axios.post('https://listen-here-api.onrender.com/users', newUserObject)
             .then(res => {
                 if (res.status === 201) {
                     setProfile(res.data)
