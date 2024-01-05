@@ -7,7 +7,10 @@ const pinSchema = new mongoose.Schema(
         title: {type: String, required: true},
         desc: {type: String, required: false},
         tags: [String],
-        creator: {type: mongoose.Schema.Types.ObjectId, required: true},
+        creator: {
+            id: {type: mongoose.Schema.Types.ObjectId, required: true},
+            displayName: {type: String, required: true}
+        },
         likedBy: [mongoose.Schema.Types.ObjectId],
         viewedBy: [mongoose.Schema.Types.ObjectId],
         viewLimit: {type: Number, required: false},
