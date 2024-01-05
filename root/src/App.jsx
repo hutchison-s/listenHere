@@ -8,6 +8,7 @@ import Help from './pages/Help'
 import LoginPage from './pages/LoginPage'
 import ErrorPage from './pages/ErrorPage'
 import NavBar from './components/NavBar'
+import Profile from './pages/Profile';
 import { UserProvider } from './contexts/UserContext';
 import Protected from './router/Protected';
 
@@ -23,6 +24,7 @@ function App() {
       </>
     )
   }
+
 
   return (
     <>
@@ -51,6 +53,9 @@ function App() {
                   }/>
                   <Route path="help" element={<Help/>} errorElement={<ErrorPage/>}/>,
                   <Route path="login" element={<LoginPage/>} errorElement={<ErrorPage/>}/>
+                  <Route path='/users'>
+                    <Route path=':userId' element={<Profile />} errorElement={<ErrorPage />}/>
+                  </Route>
                 </Route>
               </Routes>
           </UserProvider> 

@@ -1,0 +1,55 @@
+.profileLarge {
+    width: 50%;
+    max-width: 200px;
+    font-size: 120px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    border: 1px solid var(--softwhite);
+    border-radius: 50%;
+    aspect-ratio: 1;
+}
+.alignCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.connectionsBox {
+    display: flex;
+    width: 80%;
+    border: 1px solid var(--lighter-50);
+    padding: 0 1rem;
+    border-radius: 100ch;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.connectionPreview {
+    background-size: cover;
+    background-position: center;
+    background-color: var(--yellow);
+    border: 1px solid var(--softwhite);
+    color: var(--jet);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: grid;
+    justify-content: center;
+    align-items: end;
+    font-size: x-small;
+    padding-bottom: 0.5rem;
+    overflow: hidden;
+    flex: 0 1 60px;
+    margin-left: -1rem;
+    translate: 0.5rem;
+}
+.connectionsHeader,
+.connectionsFooter {
+    flex: 100%;
+    text-align: center;
+    margin: 0.5rem auto;
+}
+.connectionsFooter {
+    font-size: x-large;
+    margin: 0;
+}

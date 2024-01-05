@@ -1,30 +1,47 @@
-import { useContext, useState } from "react";
-import axios from "axios";
 import "./Account.css"
-import { UserContext } from "../contexts/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import PropTypes from 'prop-types'
+import axios from "axios";
 
-function Account() {
+function Profile() {
 
-    const {profile} = useContext(UserContext)
+    const {userId} = useParams()
+    const [profile, setProfile] = useState(null)
     const [connections, setConnections] = useState([])
 
-    const first5 = profile.connections.slice(0, 5)
-    const connectPreviews = [];
-    first5.forEach(id => {
-        axios.get("https://listen-here-api.onrender.com/users/"+id)
-            .then(res => {
-                connectPreviews.push(res.data)
-            }).catch(err => {
-                console.log(err)
-            })
+    useEffect(()=>{
+        if (profile) {
+            setInfo()
+        }
     })
-    setConnections(connectPreviews)
+
+    function setInfo() {
+        axios.get("https://listen-here-api.onrender.com/users/"+userId)
+        .then(res => {
+            setProfile(res.data)
+            const {connects} = res.data
+            const first5 = connects.slice(0, 5)
+            const connectPreviews = [];
+            first5.forEach(id => {
+                axios.get("https://listen-here-api.onrender.com/users/"+id)
+                    .then(res => {
+                        connectPreviews.push(res.data)
+                    }).catch(err => {
+                        console.log(err)
+                    })
+            })
+            setConnections(connectPreviews)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
     
+
     return (
-        <>
+        profile && <>
             <article className="alignCenter">
                     <div className="profileLarge">
                         {profile.photo
@@ -55,4 +72,8 @@ function Account() {
     )
 }
 
-export default Account;
+export default Profile;
+
+Profile.propTypes = {
+    profile: PropTypes.object.isRequired
+}
