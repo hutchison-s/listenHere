@@ -39,7 +39,7 @@ function Account() {
                     <p>Liked pins: {profile.liked.length}</p>
                     <div className="connectionsBox">
                         <p className="connectionsHeader">{profile.connections.length} Connections</p>
-                        {connections.map(p => 
+                        {connections.length > 0 && connections.map(p => 
                             <Link 
                                 to={`/users/${p._id}`}
                                 style={{backgroundImage: `url("${p.photo}")`}} 

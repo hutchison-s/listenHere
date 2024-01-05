@@ -19,7 +19,7 @@ mongoose.connect(mongoURI)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}))
 app.use(cors({
-    origin: 'https://listenhere.netlify.app'
+    origin: ['https://listenhere.netlify.app', 'http://localhost:5173']
   }))
 
 app.listen(port, () => {
