@@ -15,10 +15,14 @@ const AudioControlButton = ({audioRef}) => {
     }
 
   return (
-    <button id="pausePlay" onClick={()=>{
-        isPlaying ? audioRef.current.pause() : audioRef.current.play();
-        setIsPlaying((isPlaying)=>!isPlaying)}}>
-            {isPlaying ? <FontAwesomeIcon icon={faPause}/> : <FontAwesomeIcon icon={faPlay}/>}
+    <button 
+      id="pausePlay" 
+      onClick={()=>{
+          isPlaying ? audioRef.current.pause() : audioRef.current.play();
+          setIsPlaying((isPlaying)=>!isPlaying)
+      }}
+      className={isPlaying ? 'playing' : ''}>
+        {isPlaying ? <FontAwesomeIcon icon={faPause}/> : <FontAwesomeIcon icon={faPlay}/>}
     </button>
   )
 }

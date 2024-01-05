@@ -1,20 +1,17 @@
 import "./NewRecording.css"
-// import { useState, useContext } from "react"
-// import {UserContext} from '../contexts/UserContext'
-import { useState } from "react"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons'
+import { useContext, useState } from "react"
+import {UserContext} from '../contexts/UserContext'
 import PropTypes from 'prop-types'
 import AudioControlButton from "./AudioControlButton"
+import RecordingForm from "./RecordingForm"
+import RecordButton from "./RecordButton"
 
 export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
     const [isExpanded, setIsExpanded] = useState(false)
     const [tempBlob, setTempBlob] = useState(null)
-    const [isRecording, setIsRecording] = useState(false)
     const [streamer, setStreamer] = useState(null)
+    const {profile} = useContext(UserContext)
     const chunks = [];
-
-    // const {user} = useContext(UserContext)
 
     function initiateStream() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -40,30 +37,22 @@ export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
         }
     }
 
-    function record() {
-        console.log(streamer)
-            if (isRecording) {
-                streamer.stop()
-                setIsRecording(false)
-            } else {
-                streamer.start()
-                setIsRecording(true)
-            }
-    }
+    
     const onSubmit = (e)=>{
         e.preventDefault()
         console.log(tempBlob)
         console.log(e.target.newDesc)
         const newPin = {
-            id: Math.random(), 
-            creator: "1234", 
+            creator: {id: profile._id, displayName: profile.displayName}, 
             title: e.target.newTitle.value, 
             desc: e.target.newDesc.value, 
+            tags: e.target.tags.value.split(",").map(x=>x.toLowerCase().trim()),
             timestamp: new Date().toString(), 
-            lat: location[0], 
-            lng: location[1], 
+            latlng: [location[0], location[1]], 
             blob: tempBlob, 
-            likes: 0
+            likedBy: [],
+            viewedBy: [],
+            viewLimit: e.target.viewLimit.value == "unlimited" ? null : parseInt(e.target.viewLimit.value)
         }
         addPin([...db, newPin]);
         setTempBlob(null);
@@ -75,36 +64,19 @@ export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
         e.preventDefault()
         e.target.reset()
         setTempBlob(null)
-        initiateStream()
+        setIsExpanded(false)
     }
 
     function RecordingInterface() {
         return ( 
-            <div id="recordingInterface" className={isExpanded ? "expanded" : "collapsed"}>
+            <div id="recordingInterface" className={isExpanded ? "expanded" : ""}>
                 <h2>New Drop</h2>
                 {tempBlob
                     ? <>
                         <AudioControlButton audioRef={audioRef}/>
-                        <form 
-                            id="postRecording" 
-                            onSubmit={onSubmit}
-                            onReset={onReset}
-                        >
-                            <label htmlFor="newTitle">Title: <input type="text" name="newTitle" id="newTitle" required/></label>
-                            <label htmlFor="newDesc">Description: <textarea name="newDesc" id="newDesc" width="30" height="2"/></label>
-                            <button id="dropRecording" type="submit">DROP</button>
-                            <button id="deleteRecording" type="reset">DELETE</button>
-                        </form>
+                        <RecordingForm onReset={onReset} onSubmit={onSubmit} />
                       </>
-                    : (
-                        <button 
-                            id="recordStart" 
-                            onClick={record} 
-                            className={isRecording ? "recording" : ""}
-                        >
-                            {isRecording ? <FontAwesomeIcon icon={faStop}/> : <FontAwesomeIcon icon={faMicrophone}/>}
-                        </button>
-                    )}
+                    : <RecordButton streamer={streamer}/>}
             </div>)
     }
 

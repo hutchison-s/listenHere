@@ -85,7 +85,12 @@ function MyMap() {
       let xMoved = Math.abs(Math.abs(currentLocation[0])-Math.abs(latitude)) > threshold
       let yMoved = Math.abs(Math.abs(currentLocation[1])-Math.abs(longitude)) > threshold
       if (xMoved || yMoved) {
-        setCurrentLocation([latitude, longitude])
+        if (!document.querySelector("#recordingInterface.expanded")) {
+          console.log(document.querySelector("#recordingInterface.expanded"))
+          setCurrentLocation([latitude, longitude])
+        } else {
+          console.log("location will not update while recording interface is expanded")
+        }
       } else {
         console.log("minimal movement prevented")
       }

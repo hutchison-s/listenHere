@@ -25,7 +25,7 @@
     bottom: 1rem;
     left: 50%;
     translate: -50%;
-    height: 50vh;
+    height: 60vh;
     width: 90vw;
     overflow: hidden;
     display: flex;
@@ -36,15 +36,13 @@
     padding: 2rem;
     gap: 2rem;
     z-index: 1000;
-}
-#recordingInterface.collapsed {
     max-width: 0;
     max-height: 0;
     border-bottom-left-radius: 50%;
     border-top-left-radius: 50%;
     border-bottom-right-radius: 50%;
     border-top-right-radius: 50%;
-    transition: all 0.2s;
+    transition: all 0.5s;
 }
 
 #recordingInterface.expanded {
@@ -67,21 +65,41 @@
 #postRecording label {
     flex: 100%;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 2fr 5fr;
     text-align: right;
     gap: 0.5rem;
     font-size: 16px;
 }
-#postRecording input {
+#postRecording input,
+#postRecording select,
+#postRecording textarea {
     font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--darker-25);
+    border: 1px solid var(--poolside);
+    color: var(--softwhite);
+    padding: 0.2rem 0.5rem 0.2rem;
+    border-radius: 0.25rem;
 }
+#postRecording ::-webkit-input-placeholder,
+#postRecording ::placeholder {
+    color: var(--lighter-50);
+}
+
 #dropRecording,
 #deleteRecording {
     width: 6rem;
     height: 2rem;
     border: 1px solid var(--softwhite);
+    border-radius: 0.25rem;
     background: transparent;
-    color: var(--yellow);
+    color: var(--softwhite);
+}
+#dropRecording {
+    background-color: var(--yellow);
+    color: var(--jet);
+    border: none;
+    box-shadow: 2px 2px 15px var(--darker-25);
 }
 #recordStart {
     color: var(--softwhite);
@@ -96,4 +114,21 @@
 
 #recordStart.recording {
     background-color: red;
+}
+
+#recordingInterface #pausePlay {
+    border-radius: 50%;
+    border: 2px solid var(--softwhite);
+    background-color: transparent;
+    font-size: xx-large;
+    color: var(--softwhite);
+    width: 4rem;
+    height: 4rem;
+    display: grid;
+    place-items: center;
+}
+#recordingInterface #pausePlay.playing {
+    color: var(--yellow);
+    border-color: var(--yellow);
+    box-shadow: 0 0 10px var(--lighter-50);
 }
