@@ -4,6 +4,11 @@ import { useMapEvents } from 'react-leaflet'
 
 const MapController = ({currentLocation}) => {
         const map = useMapEvents({
+          loading: ()=>{
+            document.querySelector(".leaflet-container").width = document.querySelector("article").offsetWidth;
+            document.querySelector(".leaflet-container").height = document.querySelector("article").offsetHeight;
+            console.log("resized map")
+          },
           click: () =>{
             map.locate()
             console.log("clicked")

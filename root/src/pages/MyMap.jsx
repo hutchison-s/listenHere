@@ -25,6 +25,7 @@ function MyMap() {
     initPins()
     return navigator.geolocation.clearWatch(watcher)
   }, [])
+
     useEffect(()=>{
         if (src) {
           let str = window.URL.createObjectURL(src)

@@ -47,6 +47,11 @@
     padding-top: 0.3rem;
     color: var(--lighter-75)
 }
+#helloUser img {
+    width: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--lighter-50);
+}
 #menuToggle {
     background: transparent;
     color: var(--softwhite);

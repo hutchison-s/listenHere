@@ -1,15 +1,27 @@
 import './NavBar.css'
 import { useContext, useState } from 'react'
 import {UserContext} from '../contexts/UserContext'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faUser, faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
+import { auth } from '../config/firebase'
+import { signOut } from '@firebase/auth'
 
 function NavBar() {
-  const {user, logout} = useContext(UserContext)
+  const {profile, setProfile} = useContext(UserContext)
   const [isExpanded, setIsExpanded] = useState(false)
 
   function handleToggle() {
     setIsExpanded(!isExpanded)
+  }
+
+  const logOut = async ()=> {
+    try {
+      await signOut(auth)
+      setProfile({authorized: false})
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -17,19 +29,18 @@ function NavBar() {
       <nav id='navbar'>
         <div className="leftNav">
           
-            <a href="/">
+            <Link to="/" onClick={()=>{setIsExpanded(false)}}>
               <img src="/earpin.png" alt="Location pin with ear symbol" />
-            </a>
-            <a href="/">
+            </Link>
+            <Link to="/" onClick={()=>{setIsExpanded(false)}}>
               <h1>ListenHere</h1>
-            </a>
+            </Link>
         </div>
         <div className="rightNav">
-          {user.auth 
-            ? <a href="/account" id='helloUser'>
-                  <FontAwesomeIcon icon={faUser}/>
-                  <small>{user.name}</small>
-              </a>
+          {profile.authorized 
+            ? <Link to="/account" id='helloUser' onClick={()=>{setIsExpanded(false)}}>
+                  {profile.photo ? <img src={profile.photo} alt='profile photo'/> : <FontAwesomeIcon icon={faUser}/>}
+              </Link>
             : null}
           <button id="menuToggle" onClick={handleToggle}>
             <FontAwesomeIcon icon={faBars} />
@@ -37,31 +48,31 @@ function NavBar() {
         </div>
         <div id="hiddenMenu" className={isExpanded ? "expanded" : ""}>
           <ul>
-            {user.auth 
-              ? <>
-                <a href="/mysounds">
-                  <li>My Sounds</li>
-                </a>
-                <a href="/">
-                  <li>Map</li>
-                </a>
-                <a href="/connections">
-                  <li>Connections</li>
-                </a>
-                <a href="/account">
-                  <li>Account</li>
-                </a>
-                  <li onClick={(e)=>{
-                    e.preventDefault()
-                    logout()
-                    setIsExpanded(false)
-                  }}>Log Out</li>
+                {profile.authorized 
+                  ? <>
+                  <Link to="/mysounds" onClick={()=>{setIsExpanded(false)}}>
+                    <li>My Sounds</li>
+                  </Link>
+                  <Link to="/" onClick={()=>{setIsExpanded(false)}}>
+                    <li>Map</li>
+                  </Link>
+                  <Link to="/connections" onClick={()=>{setIsExpanded(false)}}>
+                    <li>Connections</li>
+                  </Link>
+                  <Link to="/account" onClick={()=>{setIsExpanded(false)}}>
+                    <li>Account</li>
+                  </Link>
+                      <li onClick={(e)=>{
+                        e.preventDefault()
+                        logOut()
+                        setIsExpanded(false)
+                        window.location.href = "/"
+                      }}>Log Out</li>
                   </>
-                : <a href='/'><li onClick={()=>{setIsExpanded(false)}}>Log In</li></a>
-                }
-            <a href="/help">
+                  : <Link to='/' onClick={()=>{setIsExpanded(false)}}><li>Log In</li></Link>}
+            <Link to="/help" onClick={()=>{setIsExpanded(false)}}>
               <li><FontAwesomeIcon icon={faCircleQuestion} /></li>
-            </a>
+            </Link>
           </ul>
         </div>
       </nav>

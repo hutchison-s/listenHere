@@ -1,15 +1,15 @@
-import { useContext } from 'react'
+// import { useContext } from 'react'
 import './MySounds.css'
-import { UserContext } from '../contexts/UserContext'
+// import { UserContext } from '../contexts/UserContext'
 
 function MySounds() {
 
-    const {user} = useContext(UserContext)
+    // const {user} = useContext(UserContext)
 
     return (
         <>
             <article className="gridCenter">
-                <h2>My Sounds page for {user.name} is pending</h2>
+                <h2>My Sounds page is pending</h2>
             </article>
         </>
     )

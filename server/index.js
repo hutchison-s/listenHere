@@ -1,11 +1,12 @@
 require('dotenv').config()
 const express = require('express');
+const cors = require('cors')
 const mongoose = require('mongoose');
 const EarPin = require('./schemas/EarPin')
 const User = require('./schemas/User')
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI
 
 mongoose.connect(mongoURI)
@@ -17,6 +18,9 @@ mongoose.connect(mongoURI)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}))
+app.use(cors({
+    origin: 'https://listenhere.netlify.app'
+  }))
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
@@ -35,6 +39,7 @@ DELETE /pins/:id            delete one pin
 POST /pins/:id/like         add user to pin.likedBy / add pin to user.liked
 POST /pins/:id/view         add user to pin.viewedBy / add pin to user.viewed
 
+GET /confirm/:email         confirm user exists, if not create one
 GET /users                  get all users
 POST /users                 create user
 GET /users/:id              get one user
@@ -125,6 +130,21 @@ app.delete('/pins/:id', async (req, res) => {
 -----------------------  USERS  -----------------------------
 ---------------------------------------------------------- */
 
+// Authorize by email
+
+app.get('/confirm/:email', async (req, res) => {
+    const { email } = req.params
+    try {
+        const user = await User.findOne({email: email});
+        if (!user) {
+            return res.status(404).json({error: "User not found"})
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({error: err.message})
+    }
+})
+
 // Get All Users
 app.get('/users', async (req, res) => {
     try {
@@ -151,7 +171,7 @@ app.get('/users/:id', async (req, res) => {
 
 // Create New User
 app.post('/users', async (req, res) => {
-    const {fullName, email, displayName, photo, bio} = req.body;
+    const {email, displayName, photo, bio} = req.body;
 
     if (!email || !displayName) {
         return res.status(400).json({error: "Email and Display Name are required fields."})
@@ -159,7 +179,6 @@ app.post('/users', async (req, res) => {
 
     try {
         const newUser = await User.create({
-            fullName,
             email,
             displayName,
             photo,

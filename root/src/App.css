@@ -13,8 +13,8 @@ header {
 }
 #root > article {
     position: relative;
-    width: calc(100% - 2rem);
-    height: calc(100% - 3rem);
+    width: 90vw;
+    height: 85vh;
     outline: 1px solid var(--lighter-25);
     border-radius: 0.5rem;
     margin: auto;
