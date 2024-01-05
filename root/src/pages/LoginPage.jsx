@@ -12,7 +12,7 @@ function LoginPage() {
   const [user, setUser] = useState(null)
 
   const {profile, getProfileFromUser} = useContext(UserContext)
-  const dialogRef = useRef()
+  const dialogRef = useRef(null)
 
   useEffect(()=>{
     if (user) {
@@ -63,10 +63,10 @@ function LoginPage() {
             e.preventDefault()
             newUser(e.target.newDisplayName.value)
             e.target.reset()
-            dialogRef.close()
+            dialogRef.current.close()
           }}
           onReset={()=>{
-            dialogRef.close()
+            dialogRef.current.close()
           }}>
           <p>Please enter a display name for your profile:</p>
           <input
@@ -109,7 +109,7 @@ function LoginPage() {
            <input type="email" name="newEmail" id="newEmail" placeholder='Email...' onChange={(e)=>{setEmail(e.target.value)}}/>
             <input type="password" name="newPassword" id="newPassword" placeholder='Password...' onChange={(e)=>{setPass(e.target.value)}}/>
               <button className="enter" type='submit'>Log In</button>
-              <button className="new" type="button" onClick={()=>{dialogRef.showModal()}}>Create new account</button>
+              <button className="new" type="button" onClick={()=>{dialogRef.current.showModal()}}>Create new account</button>
           </form>
           <NewUserDialog />
     </article>
