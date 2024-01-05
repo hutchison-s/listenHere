@@ -57,7 +57,7 @@ function LoginPage() {
 
   function NewUserDialog() {
     return (
-      <dialog ref={dialogRef}>
+      <dialog id="newUserDialog" ref={dialogRef}>
         <form 
           onSubmit={(e)=>{
             e.preventDefault()
