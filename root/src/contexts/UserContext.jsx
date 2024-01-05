@@ -13,7 +13,7 @@ export const UserProvider = ({children}) => {
     }, [profile])
 
     function getProfileFromUser(user) {
-        axios.get('https://listen-here-api.onrender.com/'+user.email)
+        axios.get('https://listen-here-api.onrender.com/confirm/'+user.email)
             .then(res => {
                 if (res.status === 200) {
                     setProfile(res.data)
