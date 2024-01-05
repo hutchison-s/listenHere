@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import "./Account.css"
 import { UserContext } from "../contexts/UserContext";
@@ -11,21 +11,25 @@ function Account() {
     const {profile} = useContext(UserContext)
     const [connections, setConnections] = useState([])
 
-    const first5 = profile.connections.slice(0, 5)
-    const connectPreviews = [];
-    first5.forEach(id => {
-        axios.get("https://listen-here-api.onrender.com/users/"+id)
-            .then(res => {
-                connectPreviews.push(res.data)
-            }).catch(err => {
-                console.log(err)
-            })
-    })
-    setConnections(connectPreviews)
+    useEffect(()=>{
+        const first5 = profile.connections.slice(0, 5)
+        const connectPreviews = [];
+        first5.forEach(id => {
+            axios.get("https://listen-here-api.onrender.com/users/"+id)
+                .then(res => {
+                    connectPreviews.push(res.data)
+                }).catch(err => {
+                    console.log(err)
+                })
+        })
+        setConnections(connectPreviews)
+    }, [])
+    
     
     return (
         <>
             <article className="alignCenter">
+                    <img src="/earpin.png" alt="logo" width='80px'/>
                     <div className="profileLarge">
                         {profile.photo
                             ? <img src={profile.photo} alt="profile photo" />

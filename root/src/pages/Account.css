@@ -8,12 +8,17 @@
     border: 1px solid var(--softwhite);
     border-radius: 50%;
     aspect-ratio: 1;
+    overflow: hidden;
+}
+.profileLarge img {
+    width: 100%;
 }
 .alignCenter {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 3rem;
     gap: 1rem;
 }
 .connectionsBox {
