@@ -9,7 +9,7 @@ import { UserContext } from "../contexts/UserContext";
 function Profile() {
 
     const {userId} = useParams()
-    const {profile} = useContext(UserContext)
+    const {profile, updateProfile} = useContext(UserContext)
     const [viewingProfile, setViewingProfile] = useState(null)
     const [connections, setConnections] = useState([])
 
@@ -38,6 +38,7 @@ function Profile() {
         axios.post("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"/connect", {userId: profile._id})
             .then(res => {
                 console.log(res.status, "successful connection")
+                updateProfile()
             }).catch(err => {
                 console.log(err)
             })
@@ -47,6 +48,7 @@ function Profile() {
         axios.put("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"/disconnect", {userId: profile._id})
             .then(res => {
                 console.log(res.status, "successful disconnect")
+                updateProfile()
             }).catch(err => {
                 console.log(err)
             })

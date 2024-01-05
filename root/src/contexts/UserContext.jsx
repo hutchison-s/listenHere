@@ -29,6 +29,15 @@ export const UserProvider = ({children}) => {
             })
     }
 
+    function updateProfile() {
+        axios.get('https://listen-here-api.onrender.com/users/'+profile._id)
+            .then(res => {
+                setProfile(res.data)
+            }).catch(err => {
+                console.log(err)
+            })
+    }
+
     function newUser(user) {
         const newUserObject = {
             email: user.email,
@@ -57,7 +66,7 @@ export const UserProvider = ({children}) => {
 
     
     return (
-        <UserContext.Provider value={{profile, setProfile, getProfileFromUser}}>
+        <UserContext.Provider value={{profile, setProfile, getProfileFromUser, updateProfile}}>
             {children}
         </UserContext.Provider>
 
