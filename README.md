@@ -3,7 +3,8 @@ Full stack audio-geographical social app
 
 TODO:
 
-Build out account page
+Populate pins from database
+Integrate new recording with API
 Build out mysounds page
 Build out connections page
 Build out help page

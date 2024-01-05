@@ -2,60 +2,78 @@ import "./Account.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import PropTypes from 'prop-types'
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { UserContext } from "../contexts/UserContext";
 
 function Profile() {
 
     const {userId} = useParams()
-    const [profile, setProfile] = useState(null)
+    const {profile} = useContext(UserContext)
+    const [viewingProfile, setViewingProfile] = useState(null)
     const [connections, setConnections] = useState([])
 
     useEffect(()=>{
-        if (profile) {
-            setInfo()
-        }
-    })
-
-    function setInfo() {
         axios.get("https://listen-here-api.onrender.com/users/"+userId)
         .then(res => {
-            setProfile(res.data)
-            const {connects} = res.data
-            const first5 = connects.slice(0, 5)
-            const connectPreviews = [];
+            setViewingProfile(res.data)
+            return res.data
+        }).then(p => {
+            const first5 = p.connections.slice(0, 5)
             first5.forEach(id => {
                 axios.get("https://listen-here-api.onrender.com/users/"+id)
                     .then(res => {
-                        connectPreviews.push(res.data)
+                        setConnections([...connections, res.data])
                     }).catch(err => {
                         console.log(err)
                     })
             })
-            setConnections(connectPreviews)
+            console.log(viewingProfile)
         }).catch(err => {
             console.log(err)
         })
+    }, [])
+
+    function connect() {
+        axios.post("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"connect", {userId: profile._id})
+            .then(res => {
+                console.log(res.status, "successful connection")
+            }).catch(err => {
+                console.log(err)
+            })
     }
-    
+
+    function disconnect() {
+        axios.patch("https://listen-here-api.onrender.com/users/"+viewingProfile._id+"connect", {userId: profile._id})
+            .then(res => {
+                console.log(res.status, "successful disconnect")
+            }).catch(err => {
+                console.log(err)
+            })
+    }
 
     return (
-        profile && <>
+        viewingProfile ? <>
             <article className="alignCenter">
                     <div className="profileLarge">
-                        {profile.photo
-                            ? <img src={profile.photo} alt="profile photo" />
+                        {viewingProfile.photo
+                            ? <img src={viewingProfile.photo} alt="profile photo" />
                             : <FontAwesomeIcon icon={faUser}/>
                         }
                     </div>
-                    <h2>{profile.displayName}</h2>
-                    <p><small>{profile.email}</small></p>
-                    <p>Active pins: {profile.pins.length}</p>
-                    <p>Viewed pins: {profile.viewed.length}</p>
-                    <p>Liked pins: {profile.liked.length}</p>
+                    {profile._id !== viewingProfile._id
+                        ? !profile.connections.includes(viewingProfile._id)
+                            ? <button className="connectButton" onClick={connect}>Connect</button> 
+                            : <button className="connectButton" onClick={disconnect}>Remove Connection</button>
+                        : null
+                    }
+                    <h2>{viewingProfile.displayName}</h2>
+                    <p><small>{viewingProfile.email}</small></p>
+                    <p>Active pins: {viewingProfile.pins.length}</p>
+                    <p>Viewed pins: {viewingProfile.viewed.length}</p>
+                    <p>Liked pins: {viewingProfile.liked.length}</p>
                     <div className="connectionsBox">
-                        <p className="connectionsHeader">{profile.connections.length} Connections</p>
+                        <p className="connectionsHeader">{viewingProfile.connections.length} Connections</p>
                         {connections.map(p => 
                             <Link 
                                 to={`/users/${p._id}`}
@@ -65,15 +83,12 @@ function Profile() {
                                     <span>{p.displayName}</span>
                             </Link>
                         )}
-                        {profile.connections.length > 5 ? <p className="connectionsFooter">...</p> : null}
+                        {viewingProfile.connections.length > 5 ? <p className="connectionsFooter">...</p> : null}
                     </div>
             </article>
         </>
+        : null
     )
 }
 
 export default Profile;
-
-Profile.propTypes = {
-    profile: PropTypes.object.isRequired
-}

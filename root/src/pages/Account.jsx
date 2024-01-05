@@ -13,16 +13,14 @@ function Account() {
 
     useEffect(()=>{
         const first5 = profile.connections.slice(0, 5)
-        const connectPreviews = [];
         first5.forEach(id => {
             axios.get("https://listen-here-api.onrender.com/users/"+id)
                 .then(res => {
-                    connectPreviews.push(res.data)
+                    setConnections([...connections, res.data])
                 }).catch(err => {
                     console.log(err)
                 })
         })
-        setConnections(connectPreviews)
     }, [])
     
     
@@ -48,7 +46,8 @@ function Account() {
                                 to={`/users/${p._id}`}
                                 style={{backgroundImage: `url("${p.photo}")`}} 
                                 className="connectionPreview" 
-                                key={p._id}>
+                                key={p._id}
+                                >
                                     <span>{p.displayName}</span>
                             </Link>
                         )}

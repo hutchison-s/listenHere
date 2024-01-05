@@ -58,3 +58,12 @@
     font-size: x-large;
     margin: 0;
 }
+.connectButton {
+    width: 8rem;
+    text-align: center;
+    padding: 0.5rem;
+    background-color: var(--yellow);
+    color: var(--jet);
+    border-radius: 100ch;
+    border: none;
+}

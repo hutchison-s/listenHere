@@ -314,14 +314,14 @@ app.post('/users/:id/connect', async (req, res) => {
     const { userId } = req.body
 
     try {
-        const user1 = await User.findByIdAndUpdate(
-            id,
-            { $push: {connections: userId}},
-            {new: true}
-        )
-        if (!user1) {
-            return res.status(404).json({error: "User not found"})
-        }
+        // const user1 = await User.findByIdAndUpdate(
+        //     id,
+        //     { $push: {connections: userId}},
+        //     {new: true}
+        // )
+        // if (!user1) {
+        //     return res.status(404).json({error: "User not found"})
+        // }
         const user2 = await User.findByIdAndUpdate(
             userId,
             { $push: {connections: id} },
@@ -344,14 +344,14 @@ app.patch('/users/:id/connect', async (req, res) => {
     const { userId } = req.body
 
     try {
-        const user1 = await User.findByIdAndUpdate(
-            id,
-            { $pull: {connections: userId}},
-            {new: true}
-        )
-        if (!user1) {
-            return res.status(404).json({error: "User not found"})
-        }
+        // const user1 = await User.findByIdAndUpdate(
+        //     id,
+        //     { $pull: {connections: userId}},
+        //     {new: true}
+        // )
+        // if (!user1) {
+        //     return res.status(404).json({error: "User not found"})
+        // }
         const user2 = await User.findByIdAndUpdate(
             userId,
             { $pull: {connections: id} },
