@@ -84,30 +84,33 @@ app.post('/pins', async (req, res) => {
     if (!latlng || !title || !creator || !data) {
         return res.status(400).json({error: "Required values missing. Required values are {latlng: [Number], title: String, creator: ObjectId, data: Buffer}."})
     }
-    console.log(data)
+    const pinObject = {
+        creator: creator,
+        title: title,
+        latlng: latlng,
+        timestamp: timestamp,
+        data: data,
+    }
+    if (req.body.tags) {pinObject.tags = req.body.tags}
+    if (req.body.desc) {pinObject.tags = req.body.desc}
+
     console.log("received:", title)
     try {
-        const newPin = await EarPin.create({
-            creator,
-            title,
-            latlng,
-            timestamp,
-            data: data
-        })
+        const newPin = await EarPin.create(pinObject)
 
         console.log("newpin:", newPin.title, "created by:", newPin.creator.id)
         if (!newPin) {
             return res.status(404).json({ error: 'Could not create pin'});
         }
-        // const updatedUser = await User.findByIdAndUpdate(
-        //     creator.id,
-        //     { $push: {pins: newPin._id}},
-        //     { new: true }     
-        // )
-        // console.log("userUpdated:", updatedUser)
-        // if (!updatedUser) {
-        //     return res.status(404).json({ error: 'User not found'});
-        // }
+        const updatedUser = await User.findByIdAndUpdate(
+            creator.id,
+            { $push: {pins: newPin._id}},
+            { new: true }     
+        )
+        console.log("userUpdated:", updatedUser)
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found'});
+        }
         res.status(201).json(newPin)
     } catch (err) {
         console.log("Error creating pin:", err)
