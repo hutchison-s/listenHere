@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer } from 'react-leaflet'
 import MapController from './MapController'
 import FindMe from './FindMe'
+import MapPins from './MapPins'
 import YouAreHere from './YouAreHere'
 
 const MapWindow = () => {
@@ -8,6 +9,7 @@ const MapWindow = () => {
     <MapContainer center={[41.7378961, -96.0426487]} zoom={18} minZoom={14} >
         <MapController />
         <FindMe />
+        <MapPins />
         <YouAreHere />
         <TileLayer
             url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"

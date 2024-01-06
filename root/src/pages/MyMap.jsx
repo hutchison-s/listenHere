@@ -3,24 +3,20 @@ import './MyMap.css'
 import 'leaflet/dist/leaflet.css';
 import MapWindow from '../components/MapWindow';
 import NewRecording from '../components/NewRecording';
-import AudioPlayer from '../components/AudioPlayer';
-import { useRef, useState } from 'react';
+import { AudioPlayerProvider } from '../contexts/AudioPlayerContext';
 
 
 // Main Component
 function MyMap() {
-  const [src, setSrc] = useState(null)
-  const [url, setUrl] = useState(null)
-  const audioRef = useRef()
-
 
   return (
     <>
-      <article>
-        <MapWindow />
-      </article>
-      <AudioPlayer audioRef={audioRef} url={url}/>
-      <NewRecording setSrc={setSrc} audioRef={audioRef}/> 
+      <AudioPlayerProvider>
+          <article>
+            <MapWindow />
+          </article>
+          <NewRecording />
+      </AudioPlayerProvider>
     </>
   )
 }

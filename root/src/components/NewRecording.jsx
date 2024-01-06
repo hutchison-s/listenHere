@@ -1,12 +1,18 @@
 import "./NewRecording.css"
 import { useContext, useState } from "react"
 import {UserContext} from '../contexts/UserContext'
-import PropTypes from 'prop-types'
 import AudioControlButton from "./AudioControlButton"
 import RecordingForm from "./RecordingForm"
 import RecordButton from "./RecordButton"
+import { LocationContext } from "../contexts/LocationContext"
+import { AudioPlayerContext } from "../contexts/AudioPlayerContext"
+import axios from "axios"
 
-export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
+export default function NewRecording() {
+
+    const {location} = useContext(LocationContext)
+    const {setSrcBlob} = useContext(AudioPlayerContext)
+
     const [isExpanded, setIsExpanded] = useState(false)
     const [tempBlob, setTempBlob] = useState(null)
     const [streamer, setStreamer] = useState(null)
@@ -23,7 +29,7 @@ export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
                         const blob = new Blob(chunks, { type: "audio/mpeg3" });
                         setTempBlob(blob)
                         chunks.length = 0;
-                        setSrc(blob);
+                        setSrcBlob(blob);
                     }
                     setStreamer(mediaRecorder)
                     console.log(mediaRecorder)
@@ -37,33 +43,61 @@ export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
         }
     }
 
+    const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
+        const reader = new FileReader;
+        reader.onerror = reject;
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+    });
+
     
-    const onSubmit = (e)=>{
+    const onSubmit = async (e)=>{
         e.preventDefault()
         console.log(tempBlob)
         console.log(e.target.newDesc)
+        const isLimited = e.target.viewLimit.value != "unlimited"
+        const tags = e.target.tags.value == ''
+            ? null
+            : e.target.tags.value.split(",").map(x=>x.toLowerCase().trim())
+        const base64Data = await convertBlobToBase64(tempBlob)
+        // const bufArray = await tempBlob.arrayBuffer()
+        // const binaryData = new Uint8Array(bufArray)
+        // const base64Data = btoa(String.fromCharCode.apply(null, binaryData));
+
         const newPin = {
             creator: {id: profile._id, displayName: profile.displayName}, 
             title: e.target.newTitle.value, 
-            desc: e.target.newDesc.value, 
-            tags: e.target.tags.value.split(",").map(x=>x.toLowerCase().trim()),
+            desc: e.target.newDesc.value,
             timestamp: new Date().toString(), 
-            latlng: [location[0], location[1]], 
-            blob: tempBlob, 
-            likedBy: [],
-            viewedBy: [],
-            viewLimit: e.target.viewLimit.value == "unlimited" ? null : parseInt(e.target.viewLimit.value)
+            latlng: location, 
+            data: base64Data,
+            viewLimit: {
+                isLimited: isLimited,
+                limit: isLimited ? parseInt(e.target.viewLimit.value) : 0
+            }
         }
-        addPin([...db, newPin]);
-        setTempBlob(null);
-        setIsExpanded(false);
-        setStreamer(null)
+
+        if (tags) {newPin.tags = tags}
+
+        axios.post('https://listen-here-api.onrender.com/pins', newPin)
+            .then(res => {
+                console.log("Successfully added:", res.data)
+                setTempBlob(null);
+                setIsExpanded(false);
+                setStreamer(null)
+            }).catch(err => {
+                console.log("Error creating pin:", err)
+            })
+        
     }
 
     const onReset = (e)=>{
         e.preventDefault()
         e.target.reset()
         setTempBlob(null)
+        setStreamer(null)
         setIsExpanded(false)
     }
 
@@ -73,7 +107,7 @@ export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
                 <h2>New Drop</h2>
                 {tempBlob
                     ? <>
-                        <AudioControlButton audioRef={audioRef}/>
+                        <AudioControlButton />
                         <RecordingForm onReset={onReset} onSubmit={onSubmit} />
                       </>
                     : <RecordButton streamer={streamer}/>}
@@ -97,12 +131,4 @@ export default function NewRecording({location, db, addPin, setSrc, audioRef}) {
             ></button>
         </>
     )
-}
-
-NewRecording.propTypes = {
-    location: PropTypes.array,
-    db: PropTypes.array,
-    addPin: PropTypes.func,
-    setSrc: PropTypes.func,
-    audioRef: PropTypes.object
 }

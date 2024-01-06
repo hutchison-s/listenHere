@@ -79,39 +79,38 @@ app.get('/pins/:id', async (req, res) => {
 
 // Create New Pin and add to creator's pin array
 app.post('/pins', async (req, res) => {
-    const {latlng, title, creator, data} = req.body;
+    const {latlng, title, creator, data, timestamp} = req.body;
 
     if (!latlng || !title || !creator || !data) {
         return res.status(400).json({error: "Required values missing. Required values are {latlng: [Number], title: String, creator: ObjectId, data: Buffer}."})
     }
-    const pinObject = {
-            creator: creator, 
-            title: title, 
-            desc: req.body.desc || null, 
-            tags: req.body.tags || null,
-            timestamp: req.body.timestamp, 
-            latlng: latlng, 
-            data: data, 
-            likedBy: [],
-            viewedBy: [],
-            viewLimit: req.body.viewLimit || null
-    }
-
+    console.log(data)
+    console.log("received:", title)
     try {
-        const newPin = await EarPin.create(pinObject)
+        const newPin = await EarPin.create({
+            creator,
+            title,
+            latlng,
+            timestamp,
+            data: data
+        })
+
+        console.log("newpin:", newPin.title, "created by:", newPin.creator.id)
         if (!newPin) {
             return res.status(404).json({ error: 'Could not create pin'});
         }
-        const updatedUser = await User.findByIdAndUpdate(
-            creator._id,
-            { $push: {pins: newPin._id}},
-            { new: true }     
-        )
-        if (!updatedUser) {
-            return res.status(404).json({ error: 'User not found'});
-        }
+        // const updatedUser = await User.findByIdAndUpdate(
+        //     creator.id,
+        //     { $push: {pins: newPin._id}},
+        //     { new: true }     
+        // )
+        // console.log("userUpdated:", updatedUser)
+        // if (!updatedUser) {
+        //     return res.status(404).json({ error: 'User not found'});
+        // }
         res.status(201).json(newPin)
     } catch (err) {
+        console.log("Error creating pin:", err)
         res.status(500).json({ error: err.message });
     }
 })
