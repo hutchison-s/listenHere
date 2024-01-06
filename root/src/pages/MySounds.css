@@ -1,0 +1,69 @@
+.pinCard {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 50px 14px;
+    gap: 0.2rem;
+    place-content: center;
+    width: 95%;
+    max-width: 600px;
+    border: 2px solid var(--softwhite);
+    font-family: 'Nunito', sans-serif;
+    border-radius: 0.25rem;
+    background-color: var(--teal);
+    text-shadow: 0 0 10px var(--darker-50);
+}
+.pinCardLeft,
+.pinCardRight,
+.pinCardMiddle {
+    display: grid;
+    align-items: center;
+    min-width: 80px;
+}
+.pinCardLeft,
+.pinCardRight {
+    justify-content: center;
+}
+.pinCardMiddle {
+    text-align: left;
+}
+.pinCardMiddle p {
+    font-size: small;
+}
+.pinCardFooter {
+    grid-column: 1 / 4;
+    font-size: x-small;
+    text-align: center;
+}
+.tagsBox,
+.likedBy,
+.location {
+    display: flex;
+    flex-wrap: wrap;
+    width: 95%;
+    gap: 0.2rem;
+    margin: 0.1rem;
+}
+.details {
+    grid-column: 1 /4;
+}
+.details span {
+    padding: 0.1rem 0.3rem;
+    background-color: var(--darker-25);
+}
+
+.pinCard #pausePlay {
+    border-radius: 50%;
+    border: 2px solid var(--softwhite);
+    background-color: transparent;
+    font-size: large;
+    color: var(--softwhite);
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+}
+.pinCard #pausePlay.playing {
+    color: var(--yellow);
+    border-color: var(--yellow);
+    box-shadow: 0 0 10px var(--lighter-50);
+}

@@ -3,13 +3,10 @@ Full stack audio-geographical social app
 
 TODO:
 
-Populate pins from database
-Integrate new recording with API
-Build out mysounds page
 Build out connections page
 Build out help page
 Differetiate between viewed and unviewed pins
-Add remaining views and link to view account of creator to popups
+Add remaining views 
 Add file upload option?
 Welcome page with updates as / route
 Move map to /mymap

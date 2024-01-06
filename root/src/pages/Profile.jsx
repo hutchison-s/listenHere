@@ -78,7 +78,7 @@ function Profile() {
                         <p className="connectionsHeader">{viewingProfile.connections.length} Connections</p>
                         {connections.map(p => 
                             <Link 
-                                to={`/users/${p._id}`}
+                                to={profile._id == p._id ? '/account' : `/users/${p._id}`}
                                 style={{backgroundImage: `url("${p.photo}")`}} 
                                 className="connectionPreview" 
                                 key={p._id}>

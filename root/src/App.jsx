@@ -13,6 +13,7 @@ import { UserProvider } from './contexts/UserContext';
 import Protected from './router/Protected';
 import AwaitLocation from './router/AwaitLocation';
 import { LocationProvider } from './contexts/LocationContext';
+import { AudioPlayerProvider } from './contexts/AudioPlayerContext';
 
 
 function App() {
@@ -32,38 +33,45 @@ function App() {
     <>
           <UserProvider>
             <LocationProvider>
-              <Routes>
-                <Route path='/' element={<Layout />}>
-                  <Route index element={
-                    <Protected>
-                      <AwaitLocation>
-                        <MyMap />
-                      </AwaitLocation>
-                      
-                    </Protected>
-                  }/>
-                  <Route path="mysounds" element={
-                    <Protected>
-                      <MySounds />
-                    </Protected>
-                  }/>
-                  <Route path="connections" element={
-                    <Protected>
-                      <Connections/>
-                    </Protected>
-                  }/>
-                  <Route path="account" element={
-                    <Protected>
-                      <Account/>
-                    </Protected>
-                  }/>
-                  <Route path="help" element={<Help/>} errorElement={<ErrorPage/>}/>,
-                  <Route path="login" element={<LoginPage/>} errorElement={<ErrorPage/>}/>
-                  <Route path='users'>
-                    <Route path=':userId' element={<Profile />} errorElement={<ErrorPage />}/>
+              <AudioPlayerProvider>
+                <Routes>
+                  <Route path='/' element={<Layout />}>
+                    
+                      <Route index element={
+                        <Protected>
+                          
+                            <AwaitLocation>
+                              <MyMap />
+                            </AwaitLocation>
+                          
+                        </Protected>
+                      }/>
+                      <Route path="mysounds" element={
+                        <Protected>
+                          <AudioPlayerProvider>
+                            <MySounds />
+                          </AudioPlayerProvider>
+                        </Protected>
+                      }/>
+                      <Route path="connections" element={
+                        <Protected>
+                          <Connections/>
+                        </Protected>
+                      }/>
+                      <Route path="account" element={
+                        <Protected>
+                          <Account/>
+                        </Protected>
+                      }/>
+                    
+                    <Route path="help" element={<Help/>} errorElement={<ErrorPage/>}/>,
+                    <Route path="login" element={<LoginPage/>} errorElement={<ErrorPage/>}/>
+                    <Route path='users'>
+                      <Route path=':userId' element={<Profile />} errorElement={<ErrorPage />}/>
+                    </Route>
                   </Route>
-                </Route>
-              </Routes>
+                </Routes>
+              </AudioPlayerProvider>
             </LocationProvider>
           </UserProvider> 
     </>

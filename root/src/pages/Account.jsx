@@ -44,7 +44,7 @@ function Account() {
                         {connections.length > 0 && connections.map(p => 
                             <Link 
                                 to={`/users/${p._id}`}
-                                style={{backgroundImage: `url("${p.photo}")`}} 
+                                style={p.photo ? {backgroundImage: `url("${p.photo}")`} : {backgroundImage: `url("/earpin.png")`}} 
                                 className="connectionPreview" 
                                 key={p._id}
                                 >

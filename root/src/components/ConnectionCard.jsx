@@ -3,20 +3,24 @@ import { UserContext } from '../contexts/UserContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import {Link} from 'react-router-dom'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 const ConnectionCard = ({viewingProfile}) => {
 
     const {profile} = useContext(UserContext)
-    let newPins = 0;
+    const [newPins, setNewPins] = useState(0)
 
     useEffect(()=>{
-        const {pinList} = viewingProfile;
-        pinList.forEach(id => {
-            if (!profile.viewed.includes(id)) {
-                newPins++
+        if (newPins == 0) {
+            if (viewingProfile.pins.length > 0) {
+                const {pinList} = viewingProfile.pins;
+                pinList.forEach(id => {
+                    if (!profile.viewed.includes(id)) {
+                        setNewPins((newPins => newPins+1))
+                    }
+                })
             }
-        })
+        }
     }, [])
 
   return (

@@ -1,0 +1,23 @@
+.userCard {
+    width: 95%;
+    max-width: 600px;
+    border: 2px solid var(--softwhite);
+    font-family: 'Nunito', sans-serif;
+    border-radius: 0.25rem;
+    background-color: var(--teal);
+    text-shadow: 0 0 10px var(--darker-50);
+}
+.userCard a {
+    display: flex;
+    gap: 0.2rem;
+    justify-content: flex-start;
+    color: var(--softwhite);
+    text-decoration: none;
+}
+.userCard .userImage {
+    width: 60px;
+    object-fit: contain;
+    font-size: xx-large;
+    display: grid;
+    place-items: center;
+}

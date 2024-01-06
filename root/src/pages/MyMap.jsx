@@ -3,7 +3,6 @@ import './MyMap.css'
 import 'leaflet/dist/leaflet.css';
 import MapWindow from '../components/MapWindow';
 import NewRecording from '../components/NewRecording';
-import { AudioPlayerProvider } from '../contexts/AudioPlayerContext';
 
 
 // Main Component
@@ -11,12 +10,10 @@ function MyMap() {
 
   return (
     <>
-      <AudioPlayerProvider>
           <article>
             <MapWindow />
           </article>
           <NewRecording />
-      </AudioPlayerProvider>
     </>
   )
 }

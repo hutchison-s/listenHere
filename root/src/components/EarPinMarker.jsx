@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import { Marker, Popup } from 'react-leaflet'
 import { Icon } from 'leaflet'
+import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import AudioControlButton from './AudioControlButton'
@@ -36,6 +37,7 @@ function EarPinMarker({pin}) {
             console.log("Error unliking pin:", err)
           })
       } else {
+        console.log("attempting like")
         axios.post('https://listen-here-api.onrender.com/pins/'+pin._id+"/like", {userId: profile._id})
           .then(res => {
             console.log(res.data)
@@ -70,7 +72,7 @@ function EarPinMarker({pin}) {
             setSrcBlob(b);
             console.log("sent source")
           },
-          popupclose: ()=>{audioRef.current.pause()}
+          popupclose: ()=>{audioRef && audioRef.current.pause()}
         }}
       >
         <Popup>
@@ -78,15 +80,17 @@ function EarPinMarker({pin}) {
             <div className='popupHeader'>
               <div>
                 <h2>{pin.title}</h2>
-                <h3><em>{pin.creator.displayName}</em></h3>
+                <Link to={profile._id == pin.creator.id ? '/account' : `/users/${pin.creator.id}`}>
+                  <h3><em>{pin.creator.displayName}</em></h3>
+                </Link>
               </div>
               <AudioControlButton />
             </div>
               <p>{pin.desc}</p>
             <div className='popupFooter'>
               <p><small>{pin.timestamp}</small></p>
-              <div className={isLiked ? "likes liked" : "likes"}>
-                <FontAwesomeIcon icon={faHeart} onClick={()=>{likePin}}/>
+              <div className={isLiked ? "likes liked" : "likes"} onClick={likePin}>
+                <FontAwesomeIcon icon={faHeart} />
                 <span>{pin.likedBy.length}</span>
               </div>
             </div>
@@ -96,9 +100,7 @@ function EarPinMarker({pin}) {
     )
   }
   EarPinMarker.propTypes = {
-    pin: PropTypes.object,
-    audioRef: PropTypes.object,
-    setSrc: PropTypes.func
+    pin: PropTypes.object
   }
 
 export default EarPinMarker
