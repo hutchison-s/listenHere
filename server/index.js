@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const cors = require('cors')
+const bodyParser = require('bodyParses')
 const mongoose = require('mongoose');
 const EarPin = require('./schemas/EarPin')
 const User = require('./schemas/User')
@@ -16,12 +17,11 @@ mongoose.connect(mongoURI)
         console.log('Error connecting to MongoDB', err.message);
     });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true}))
+app.use(express.json({limit: '16mb'}));
+app.use(express.urlencoded({ extended: true, limit: '16mb'}))
 app.use(cors({
     origin: ['https://listenhere.netlify.app', 'http://localhost:5173']
   }))
-
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
@@ -261,6 +261,35 @@ app.post('/pins/:id/like', async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
         res.json({message: "Pin like logged successfully"})
+    } catch (err) {
+        res.status(500).json({error: err.message})
+    }
+})
+
+// Unlike pin
+app.put('/pins/:id/unlike', async (req, res) => {
+    const { id } = req.params
+    const { userId } = req.body
+
+    try {
+        const updatedPin = await EarPin.findByIdAndUpdate(
+            id,
+            { $pull: {likedBy: userId}},
+            {new: true}
+        )
+        if (!updatedPin) {
+            return res.status(404).json({error: "Pin not found"})
+        }
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $pull: {liked: id} },
+            { new: true }
+          );
+      
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json({message: "Pin unlike logged successfully"})
     } catch (err) {
         res.status(500).json({error: err.message})
     }
