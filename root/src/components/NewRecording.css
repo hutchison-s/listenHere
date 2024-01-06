@@ -33,8 +33,8 @@
     place-items: center;
     background-color: var(--teal);
     transition: all 0.5s;
-    padding: 2rem;
-    gap: 2rem;
+    padding: 1rem;
+    gap: 1.5rem;
     z-index: 1000;
     max-width: 0;
     max-height: 0;
@@ -48,6 +48,7 @@
 #recordingInterface.expanded {
     max-width: 400px; 
     max-height: 1000px;
+    min-height: 500px;
     border-bottom-left-radius: 50vw;
     border-top-left-radius: 1rem;
     border-bottom-right-radius: 50vw;
