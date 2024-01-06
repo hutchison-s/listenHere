@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require('express');
 const cors = require('cors')
-const bodyParser = require('bodyParses')
 const mongoose = require('mongoose');
 const EarPin = require('./schemas/EarPin')
 const User = require('./schemas/User')
