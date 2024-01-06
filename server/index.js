@@ -96,7 +96,7 @@ app.post('/pins', async (req, res) => {
             return res.status(404).json({ error: 'Could not create pin'});
         }
         const updatedUser = await User.findByIdAndUpdate(
-            creator,
+            creator._id,
             { $push: {pins: newPin._id}},
             { new: true }     
         )
@@ -314,14 +314,14 @@ app.post('/users/:id/connect', async (req, res) => {
     const { userId } = req.body
 
     try {
-        // const user1 = await User.findByIdAndUpdate(
-        //     id,
-        //     { $push: {connections: userId}},
-        //     {new: true}
-        // )
-        // if (!user1) {
-        //     return res.status(404).json({error: "User not found"})
-        // }
+        const user1 = await User.findByIdAndUpdate(
+            id,
+            { $push: {connections: userId}},
+            {new: true}
+        )
+        if (!user1) {
+            return res.status(404).json({error: "User not found"})
+        }
         const user2 = await User.findByIdAndUpdate(
             userId,
             { $push: {connections: id} },
@@ -344,14 +344,14 @@ app.put('/users/:id/disconnect', async (req, res) => {
     const { userId } = req.body
 
     try {
-        // const user1 = await User.findByIdAndUpdate(
-        //     id,
-        //     { $pull: {connections: userId}},
-        //     {new: true}
-        // )
-        // if (!user1) {
-        //     return res.status(404).json({error: "User not found"})
-        // }
+        const user1 = await User.findByIdAndUpdate(
+            id,
+            { $pull: {connections: userId}},
+            {new: true}
+        )
+        if (!user1) {
+            return res.status(404).json({error: "User not found"})
+        }
         const user2 = await User.findByIdAndUpdate(
             userId,
             { $pull: {connections: id} },
