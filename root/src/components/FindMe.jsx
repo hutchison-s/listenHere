@@ -1,13 +1,18 @@
 import {useMap} from 'react-leaflet'
-import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
+import { useContext } from 'react'
+import { LocationContext } from '../contexts/LocationContext'
 
-const FindMe = ({currentLocation}) => {
+const FindMe = () => {
+
     const map = useMap()
+    const {location} = useContext(LocationContext)
+
     const onClick = ()=>{
-        map.panTo(currentLocation,{animate: true, duration: 0.5})
+        map.flyTo(location, 18, {animate: true})
     }
+
     const style = {
         zIndex: "1000",
         position: "absolute",
@@ -23,12 +28,10 @@ const FindMe = ({currentLocation}) => {
         textDecoration: 'none'
     }
   return (
-    <button id='findMe' onClick={onClick} style={style}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+    <button id='findMe' onClick={onClick} style={style}>
+      <FontAwesomeIcon icon={faLocationCrosshairs}/>
+    </button>
   )
 }
 
 export default FindMe
-
-FindMe.propTypes = {
-    currentLocation: PropTypes.array
-}

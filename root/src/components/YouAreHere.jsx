@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types'
 import { Icon } from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
+import { useContext } from 'react';
+import { LocationContext } from '../contexts/LocationContext';
 
-const YouAreHere = ({currentLocation}) => {
-
+const YouAreHere = () => {
+    const {location} = useContext(LocationContext)
     const youIcon = new Icon({
         iconUrl: "/person-rays-solid.svg",
         iconSize: [30, 30]
@@ -11,15 +12,11 @@ const YouAreHere = ({currentLocation}) => {
 
   return (
     <Marker 
-        position={currentLocation || [40,-96]} 
+        position={location} 
         icon={youIcon}>
             <Popup><h2>You are here</h2></Popup>
     </Marker>
   )
-}
-
-YouAreHere.propTypes = {
-    currentLocation: PropTypes.array
 }
 
 export default YouAreHere
