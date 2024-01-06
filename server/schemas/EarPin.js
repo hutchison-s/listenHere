@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const pinSchema = new mongoose.Schema(
     {
         timestamp: {type: Date, default: Date.toString},
-        latlng: {type: [Number], required: true},
+        latlng: {type: {lat: Number, lng: Number}, required: true},
         title: {type: String, required: true},
         desc: {type: String, required: false},
         tags: [String],
