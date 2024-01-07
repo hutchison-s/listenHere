@@ -34,21 +34,3 @@ export const isSignificant = (threshold, oldLoc, newLoc) => {
     let isBig = (xMoved || yMoved)
     return isBig;
 }
-
-export const initiateAudioRecorder = (onDataAvailable, onStop, callback) => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({audio: true})
-            .then((stream) => {
-                const mediaRecorder = new MediaRecorder(stream)
-                mediaRecorder.ondataavailable = onDataAvailable
-                mediaRecorder.onstop = onStop
-                callback(mediaRecorder)
-            })
-            .catch((err) => {
-                console.error(`The following getUserMedia error occurred: ${err}`);
-                alert("Microphone access not allowed. Please check your device's settings.")
-            });
-    } else {
-        console.log("getUserMedia not supported on your browser!");
-    }
-}

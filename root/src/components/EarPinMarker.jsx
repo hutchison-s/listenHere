@@ -2,14 +2,12 @@ import PropTypes from 'prop-types'
 import { Marker, Popup } from 'react-leaflet'
 import { earIcon } from '../assets/icons'
 import {Link} from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import AudioControlButton from './AudioControlButton'
 import { useContext, useEffect, useState } from 'react'
 import {UserContext} from '../contexts/UserContext'
 import {AudioPlayerContext} from '../contexts/AudioPlayerContext'
 import { base64toBlob, timestampToString } from '../utils/utilFuncions'
-import { togglePinLike } from '../api/apiCalls'
+import LikeComponent from './LikeComponent'
 
 function EarPinMarker({pin}) {
 
@@ -22,10 +20,6 @@ function EarPinMarker({pin}) {
         setIsLiked(true)
       }
     }, [])
-
-    const likeThisPin = ()=>{
-      togglePinLike(pin, profile, isLiked, setIsLiked)
-    }
     
     return (
       <Marker 
@@ -54,10 +48,7 @@ function EarPinMarker({pin}) {
               <p>{pin.desc}</p>
             <div className='popupFooter'>
               <p><small>{timestampToString(pin.timestamp)}</small></p>
-              <div className={isLiked ? "likes liked" : "likes"} onClick={likeThisPin}>
-                <FontAwesomeIcon icon={faHeart} />
-                <span>{pin.likedBy.length}</span>
-              </div>
+              <LikeComponent pin={pin} profile={profile} isLiked={isLiked} setIsLiked={setIsLiked} />
             </div>
           </div>
         </Popup>

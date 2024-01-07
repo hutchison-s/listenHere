@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
-import { getUser, togglePinLike } from "../api/apiCalls";
-import { base64toBlob } from "../utils/utilFuncions";
+import { getUser } from "../api/apiCalls";
+import { base64toBlob, timestampToString } from "../utils/utilFuncions";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { AudioPlayerContext } from "../contexts/AudioPlayerContext";
 import AudioControlButton from './AudioControlButton'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import LikeComponent from "./LikeComponent";
+import DeleteButton from './DeleteButton'
 
 const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
     const {profile} = useContext(UserContext)
@@ -29,22 +29,27 @@ const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
       }
     }, [])
 
+    const loadThis = ()=>{
+      audioRef.current.pause()
+      const b = base64toBlob(pin.data)
+      setSrcBlob(b);
+      setIsLoaded(true)
+      console.log("sent source")
+  }
     const LoadLogo = ()=>{
         return (
-            <img src="/earpin.png" alt="Listen Hear Icon" width='40px' onClick={()=>{
-                audioRef.current.pause()
-                const b = base64toBlob(pin.data)
-                setSrcBlob(b);
-                setIsLoaded(true)
-                console.log("sent source")
-            }}/>
+            <img src="/earpin.png" alt="Listen Hear Icon" width='40px' />
         )
     }
 
   return (
     <div className="pinCard" onClick={()=>{
             if (isFeatured !== pin._id) {
+                loadThis()
                 setIsFeatured(pin._id)
+            } else {
+                audioRef.current.pause()
+                setIsFeatured(null)
             }
         }}>
       <div className="pinCardLeft">
@@ -57,20 +62,12 @@ const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
         </p>
       </div>
       <div className="pinCardRight">
-        <div className={isLiked ? "likes liked" : "likes"}>
-          <FontAwesomeIcon
-            icon={faHeart}
-            onClick={() => {
-              togglePinLike(pin, profile, isLiked, setIsLiked)
-            }}
-          />
-          <span>{pin.likedBy.length}</span>
-        </div>
-        <p>{pin.desc}</p>
+        <LikeComponent pin={pin} profile={profile} isLiked={isLiked} setIsLiked={setIsLiked}/>
+        <DeleteButton pin={pin}/>
       </div>
       <div className="pinCardFooter">
         <p>
-          <small>{pin.timestamp}</small>
+          <small>{timestampToString(pin.timestamp)}</small>
         </p>
       </div>
       {isExpanded && 
