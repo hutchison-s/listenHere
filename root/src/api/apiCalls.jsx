@@ -6,24 +6,29 @@ const usersURL = baseURL+'users/'
 
 export const togglePinLike = (pin, profile, isLiked, setIsLiked)=>{
     if (isLiked) {
-      axios.put(pinsURL+pin._id+"/unlike", {userId: profile._id})
-        .then(res => {
-          console.log(res.data)
-          setIsLiked(false)
-        }).catch(err => {
-          console.log("Error unliking pin:", err)
-        })
+        if (profile.liked.includes(pin._id)) {
+            axios.put(pinsURL+pin._id+"/unlike", {userId: profile._id})
+                .then(res => {
+                    console.log(res.data)
+                    setIsLiked(false)
+                }).catch(err => {
+                    console.log("Error unliking pin:", err)
+                })
+        }
+      
     } else {
-      console.log("attempting like")
-      axios.post(pinsURL+pin._id+"/like", {userId: profile._id})
-        .then(res => {
-          console.log(res.data)
-          setIsLiked(true)
-        }).catch(err => {
-          console.log("Error liking pin:", err)
-        })
-    }
+        if (!profile.liked.includes(pin._id)) {
+            console.log("attempting like")
+            axios.post(pinsURL+pin._id+"/like", {userId: profile._id})
+                .then(res => {
+                    console.log(res.data)
+                    setIsLiked(true)
+                 }).catch(err => {
+                    console.log("Error liking pin:", err)
+                })
+        }
   }
+}
 
 export const getUser = (id, callback)=>{
     axios.get(usersURL+id)
@@ -54,6 +59,15 @@ export const getAllPins = (callback) => {
 
 export const createPin = (newPin, callback) => {
     axios.post(pinsURL, newPin)
+        .then(res => {
+            callback(res.data)
+        }).catch(err => {
+            console.log("Error creating pin:", err)
+        })
+}
+
+export const deletePin = (id, callback) => {
+    axios.delete(pinsURL+id)
         .then(res => {
             callback(res.data)
         }).catch(err => {
