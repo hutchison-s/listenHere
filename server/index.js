@@ -118,7 +118,7 @@ app.post('/pins', async (req, res) => {
         data: data,
     }
     if (req.body.tags) {pinObject.tags = req.body.tags}
-    if (req.body.desc) {pinObject.tags = req.body.desc}
+    if (req.body.desc) {pinObject.desc = req.body.desc}
 
     console.log("received:", title)
     try {
@@ -149,7 +149,7 @@ app.delete('/pins/:id', async (req, res) => {
     const { id } = req.params;
   
     try {
-      const deletedPin = await EarPin.findOne(id);
+      const deletedPin = await EarPin.findOneAndDelete(id);
       const creatorId = deletedPin.creator.id
   
       if (!deletedPin) {
