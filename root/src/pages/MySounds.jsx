@@ -22,6 +22,17 @@ function MySounds() {
             } else {
                 console.log("No pins associated with user")
             }
+        } else {
+            userPins.length = 0;
+            if (profile.pins.length > 0) {
+                profile.pins.forEach((id) => {
+                    getPin(id, (doc)=>{
+                        setUserPins([...userPins, doc])
+                    })
+                })
+            } else {
+                console.log("No pins associated with user")
+            }
         }
     }, [])
 

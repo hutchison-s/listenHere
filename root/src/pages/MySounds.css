@@ -19,6 +19,7 @@
     display: grid;
     align-items: center;
     min-width: 80px;
+    grid-row: 1 / 3;
 }
 .pinCardLeft,
 .pinCardRight {
@@ -32,7 +33,7 @@
 }
 .pinCardFooter {
     grid-column: 1 / 4;
-    font-size: x-small;
+    font-size: small;
     text-align: center;
 }
 .tagsBox,
@@ -67,4 +68,15 @@
     color: var(--yellow);
     border-color: var(--yellow);
     box-shadow: 0 0 10px var(--lighter-50);
+}
+
+.pinCard .deleteButton {
+    background-color: transparent;
+    padding: 0.2rem;
+    color: var(--softwhite);
+    border: none;
+}
+
+.pinCard .likes {
+    padding: 0.2rem;
 }
