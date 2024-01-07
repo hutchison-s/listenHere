@@ -6,6 +6,7 @@ export const LocationContext = createContext(null)
 export const LocationProvider = ({children}) => {
 
     const [location, setLocation] = useState(null)
+    const [heading, setHeading] = useState(0)
 
     useEffect(()=>{
         console.log("Using navigator to search for current location.")
@@ -14,9 +15,10 @@ export const LocationProvider = ({children}) => {
             setLocation(position)
             console.log("GetPosition acquired location:", position)
         })
-        const watcher = navigator.geolocation.watchPosition(({coords: {latitude, longitude}})=>{
+        const watcher = navigator.geolocation.watchPosition(({coords: {latitude, longitude, heading}})=>{
             const position = {lat: latitude, lng: longitude}
             setLocation(position)
+            setHeading(heading)
             console.log("Watcher acquired location:", position)
         }, (error)=>{
             console.log("Error detecting location to set context", error)
@@ -32,7 +34,7 @@ export const LocationProvider = ({children}) => {
     }, [location])
     
     return (
-        <LocationContext.Provider value={{location, setLocation}}>
+        <LocationContext.Provider value={{heading, location, setLocation}}>
             {children}
         </LocationContext.Provider>
 
