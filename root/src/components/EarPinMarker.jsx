@@ -8,10 +8,11 @@ import {UserContext} from '../contexts/UserContext'
 import {AudioPlayerContext} from '../contexts/AudioPlayerContext'
 import { base64toBlob, timestampToString } from '../utils/utilFuncions'
 import LikeComponent from './LikeComponent'
+import { viewPin } from '../api/apiCalls'
 
 function EarPinMarker({pin}) {
 
-    const {profile} = useContext(UserContext)
+    const {profile, updateProfile} = useContext(UserContext)
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
     const [isLiked, setIsLiked] = useState(false)
 
@@ -19,7 +20,7 @@ function EarPinMarker({pin}) {
       if (profile.liked.includes(pin._id)) {
         setIsLiked(true)
       }
-    }, [])
+    }, [profile])
     
     return (
       <Marker 
@@ -30,6 +31,10 @@ function EarPinMarker({pin}) {
             const b = base64toBlob(pin.data)
             setSrcBlob(b);
             console.log("sent source")
+            viewPin(pin, profile, ({message})=>{
+              console.log(message)
+            })
+            updateProfile()
           },
           popupclose: ()=>{audioRef && audioRef.current.pause()}
         }}

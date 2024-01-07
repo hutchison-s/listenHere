@@ -11,7 +11,6 @@ function MySounds() {
     const [isFeatured, setIsFeatured] = useState('')
 
     useEffect(()=>{
-        console.log(profile)
         if (userPins.length == 0) {
             if (profile.pins.length > 0) {
                 profile.pins.forEach((id) => {
@@ -23,18 +22,18 @@ function MySounds() {
                 console.log("No pins associated with user")
             }
         } else {
-            userPins.length = 0;
             if (profile.pins.length > 0) {
-                profile.pins.forEach((id) => {
+                profile.pins.filter(p => !userPins.map(doc=>doc._id).includes(p)).forEach((id) => {
                     getPin(id, (doc)=>{
                         setUserPins([...userPins, doc])
                     })
                 })
             } else {
                 console.log("No pins associated with user")
+                setUserPins([])
             }
         }
-    }, [])
+    }, [profile])
 
     return (
         <>

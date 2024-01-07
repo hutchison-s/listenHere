@@ -17,7 +17,7 @@ export default function NewRecording() {
     const [isExpanded, setIsExpanded] = useState(false)
     const [tempBlob, setTempBlob] = useState(null)
     const [streamer, setStreamer] = useState(null)
-    const {profile} = useContext(UserContext)
+    const {profile, updateProfile} = useContext(UserContext)
     const chunks = [];
 
 
@@ -75,6 +75,7 @@ export default function NewRecording() {
             setTempBlob(null);
             setIsExpanded(false);
             setStreamer(null)
+            updateProfile()
         })
         
     }
