@@ -4,6 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose');
 const EarPin = require('./schemas/EarPin')
 const User = require('./schemas/User')
+const axios = require('axios')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +26,31 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
+app.get('/ping', (req, res)=>{
+    const newPing = new Date().toTimeString()
+    console.log("pinged at", newPing)
+    return res.end('ping')
+})
+
+const seconds = ()=>Math.floor(Date.now()/1000)
+let started = seconds()
+
+const caffeine = setInterval(()=>{
+    const now = seconds()
+    const elapsed = now - started
+    if (elapsed !== 0 && elapsed % 600 == 0) {
+        axios.get('https://listen-here-api.onrender.com/ping')
+        .then(res => {
+            console.log(res.data)
+            started = now
+        })
+        .catch(err => {
+            console.log('Error making ping request:', err)
+        })
+    }
+    
+}, 600000)
+
 /* ----------------------------------------------------------
 ------------------  SUMMARY OF METHODS  ---------------------
 ---------------------------------------------------------- */
@@ -38,7 +64,7 @@ DELETE /pins/:id            delete one pin
 POST /pins/:id/like         add user to pin.likedBy / add pin to user.liked
 POST /pins/:id/view         add user to pin.viewedBy / add pin to user.viewed
 
-GET /confirm/:email         confirm user exists, if not create one
+POST /confirm               confirm user exists, if not create one
 GET /users                  get all users
 POST /users                 create user
 GET /users/:id              get one user
@@ -141,10 +167,13 @@ app.delete('/pins/:id', async (req, res) => {
 
 // Authorize by email
 
-app.get('/confirm/:email', async (req, res) => {
-    const { email } = req.params
+app.post('/confirm', async (req, res) => {
+    const { uid, email } = req.body
+    if (!uid || !email) {
+        return res.status(400).json({error: "Missing information necessary to verify user account."})
+    }
     try {
-        const user = await User.findOne({email: email});
+        const user = await User.findOne({firebase: uid, email: email});
         if (!user) {
             return res.status(404).json({error: "User not found"})
         }
@@ -180,14 +209,15 @@ app.get('/users/:id', async (req, res) => {
 
 // Create New User
 app.post('/users', async (req, res) => {
-    const {email, displayName, photo, bio} = req.body;
+    const {email, displayName, photo, bio, uid} = req.body;
 
-    if (!email || !displayName) {
-        return res.status(400).json({error: "Email and Display Name are required fields."})
+    if (!email || !displayName || !uid) {
+        return res.status(400).json({error: "UID, Email and Display Name are required fields."})
     }
 
     try {
         const newUser = await User.create({
+            firebase: uid,
             email,
             displayName,
             photo,

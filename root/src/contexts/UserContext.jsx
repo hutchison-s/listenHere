@@ -13,7 +13,7 @@ export const UserProvider = ({children}) => {
     }, [profile])
 
     function getProfileFromUser(user) {
-        axios.get('https://listen-here-api.onrender.com/confirm/'+user.email)
+        axios.post('https://listen-here-api.onrender.com/confirm/', {uid: user.uid, email: user.email})
             .then(res => {
                 if (res.status === 200) {
                     setProfile(res.data)
@@ -40,6 +40,7 @@ export const UserProvider = ({children}) => {
 
     function newUser(user) {
         const newUserObject = {
+            uid: user.uid,
             email: user.email,
             displayName: user.displayName || user.email.split("@")[0],
             bio: 'No bio created yet',
