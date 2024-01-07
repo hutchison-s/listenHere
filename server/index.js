@@ -357,8 +357,8 @@ app.post('/pins/:id/view', async (req, res) => {
         if (!updatedPin) {
             return res.status(404).json({error: "Pin not found"})
         }
-        if (updatedPin.viewLimit) {
-            const limit = updatedPin.viewLimit - 1
+        if (updatedPin.viewLimit.isLimited) {
+            const limit = updatedPin.viewLimit.limit - 1
             if (limit > 0) {
                 await EarPin.findByIdAndUpdate(id, {viewLimit: limit})
             } else {
