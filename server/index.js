@@ -149,11 +149,21 @@ app.delete('/pins/:id', async (req, res) => {
     const { id } = req.params;
   
     try {
-      const deletedPin = await EarPin.findByIdAndDelete(id);
+      const deletedPin = await EarPin.findOne(id);
+      const creatorId = deletedPin.creator.id
   
       if (!deletedPin) {
         return res.status(404).json({ error: 'Pin not found.' });
       }
+
+      const updatedUser = await User.findByIdAndUpdate(
+        creatorId, 
+        {$pull: {pins: deletedPin._id}},
+        {new: true}
+        )
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'Error removing pin from user profile.' });
+          }
   
       res.json({ message: 'Pin deleted successfully.' });
     } catch (err) {
@@ -280,7 +290,6 @@ app.patch('/users/:id', async (req, res) => {
 app.post('/pins/:id/like', async (req, res) => {
     const { id } = req.params
     const { userId } = req.body
-
     try {
         const updatedPin = await EarPin.findByIdAndUpdate(
             id,
