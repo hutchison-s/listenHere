@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import "./Connections.css"
 import { UserContext } from "../contexts/UserContext";
 import ConnectionCard from '../components/ConnectionCard'
-import axios from "axios";
+import { getUser } from "../api/apiCalls";
 
 function Connections() {
 
@@ -13,16 +13,11 @@ function Connections() {
     useEffect(()=>{
         if (connections.length == 0) {
             if (profile.connections.length > 0) {
-                console.log(typeof(profile.connections))
-                const temp = [...profile.connections]
-            for (let id of temp) {
-            axios.get("https://listen-here-api.onrender.com/users/"+id)
-                .then(res => {
-                    setConnections([...connections, res.data])
-                }).catch(err => {
-                    console.log(err)
-                })
-            }
+                for (let id of profile.connections) {
+                    getUser(id, (doc)=>{
+                        setConnections([...connections, doc])
+                    })
+                }
             } else {
                 console.log("No pins associated with user")
             }
@@ -32,7 +27,7 @@ function Connections() {
     return (
         <>
             <article className="alignCenter">
-                <h2>{profile.connections.length} Connections</h2>
+                <h2>{profile.connections.length} Connection{profile.connections.length > 1 && "s"}</h2>
                 {connections.length > 0 && connections.map(p => <ConnectionCard key={p._id} viewingProfile={p}/>)}
             </article>
         </>

@@ -6,10 +6,11 @@
     place-content: center;
     width: 95%;
     max-width: 600px;
-    border: 2px solid var(--softwhite);
+    border: 1px solid var(--softwhite);
+    box-shadow: 0 0 10px var(--yellow-50);
     font-family: 'Nunito', sans-serif;
     border-radius: 0.25rem;
-    background-color: var(--teal);
+    background-image: linear-gradient(to right, var(--teal), var(--teal-50));
     text-shadow: 0 0 10px var(--darker-50);
 }
 .pinCardLeft,

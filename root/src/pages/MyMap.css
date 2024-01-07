@@ -8,12 +8,17 @@
     position: relative;
 }
 .leaflet-popup-content {
-    min-width: 8rem;
+    min-width: 60vw;
+}
+.popupFooter,
+.popupHeader {
+    max-width: 80vw;
 }
 .popupHeader {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    gap: 0.2rem;
 }
 .popupFooter {
     display: flex;
@@ -32,7 +37,7 @@
 .popupHeader #pausePlay {
     border-radius: 50%;
     border: 2px solid var(--teal);
-    margin: auto;
+    margin: auto 0 auto auto;
     background-color: transparent;
     font-size: large;
     color: var(--teal);
@@ -40,4 +45,18 @@
     height: 3rem;
     display: grid;
     place-items: center;
+}
+#findMe {
+    z-index: 1000;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 200;
+    text-align: center;
+    aspect-ratio: 1;
+    text-decoration: none;
 }

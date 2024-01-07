@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import axios from "axios";
+import { getUser, togglePinLike } from "../api/apiCalls";
+import { base64toBlob } from "../utils/utilFuncions";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { AudioPlayerContext } from "../contexts/AudioPlayerContext";
@@ -19,50 +20,14 @@ const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
       if (profile.liked.includes(pin._id)) {
         setIsLiked(true)
       }
-      for (let id of pin.likedBy) {
-        axios.get('https://listen-here-api.onrender.com/users/'+id)
-            .then(res => {
-                setLikedBy([...likedBy, res.data])
-            }).catch(err =>{
-                console.log(err)
-            })
+      if (likedBy.length == 0) {
+        for (let id of pin.likedBy) {
+          getUser(id, (doc => {
+            setLikedBy([...likedBy, doc])
+          }))
+        }
       }
-      
     }, [])
-
-    const likePin = ()=>{
-      if (isLiked) {
-        axios.put('https://listen-here-api.onrender.com/pins/'+pin._id+"/unlike", {userId: profile._id})
-          .then(res => {
-            console.log(res.data)
-            setIsLiked(false)
-          }).catch(err => {
-            console.log("Error unliking pin:", err)
-          })
-      } else {
-        axios.post('https://listen-here-api.onrender.com/pins/'+pin._id+"/like", {userId: profile._id})
-          .then(res => {
-            console.log(res.data)
-            setIsLiked(true)
-          }).catch(err => {
-            console.log("Error liking pin:", err)
-          })
-      }
-      
-    }
-    
-    const base64toBlob = (base64Data) => {
-      const base64EncodedString = base64Data.split(';base64,')[1];
-      const binaryData = atob(base64EncodedString);
-      const arrayBuffer = new ArrayBuffer(binaryData.length);
-      const uint8Array = new Uint8Array(arrayBuffer);
-      for (let i = 0; i < binaryData.length; i++) {
-        uint8Array[i] = binaryData.charCodeAt(i);
-      }
-      const blobData = new Blob([arrayBuffer], { type: 'audio/mpeg3' });
-
-      return blobData
-    }
 
     const LoadLogo = ()=>{
         return (
@@ -96,7 +61,7 @@ const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
           <FontAwesomeIcon
             icon={faHeart}
             onClick={() => {
-              likePin;
+              togglePinLike(pin, profile, isLiked, setIsLiked)
             }}
           />
           <span>{pin.likedBy.length}</span>

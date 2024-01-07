@@ -1,10 +1,11 @@
 .userCard {
     width: 95%;
     max-width: 600px;
-    border: 2px solid var(--softwhite);
+    border: 1px solid var(--softwhite);
+    box-shadow: 0 0 10px var(--yellow-50);
     font-family: 'Nunito', sans-serif;
     border-radius: 0.25rem;
-    background-color: var(--teal);
+    background-image: linear-gradient(to right, var(--teal), var(--teal-50));
     text-shadow: 0 0 10px var(--darker-50);
 }
 .userCard a {
@@ -14,10 +15,19 @@
     color: var(--softwhite);
     text-decoration: none;
 }
+.userCard .userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 0.4rem;
+}
 .userCard .userImage {
     width: 60px;
     object-fit: contain;
     font-size: xx-large;
     display: grid;
     place-items: center;
+}
+.userImage img {
+    width: 100%;
 }

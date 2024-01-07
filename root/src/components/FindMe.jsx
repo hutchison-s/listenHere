@@ -12,23 +12,8 @@ const FindMe = () => {
     const onClick = ()=>{
         map.flyTo(location, 18, {animate: true})
     }
-
-    const style = {
-        zIndex: "1000",
-        position: "absolute",
-        top: '10px',
-        right: '10px',
-        width: '40px',
-        height: '40px',
-        cursor: 'pointer',
-        fontSize: "22px",
-        fontWeight: '200',
-        textAlign: 'center',
-        aspectRatio: '1',
-        textDecoration: 'none'
-    }
   return (
-    <button id='findMe' onClick={onClick} style={style}>
+    <button id='findMe' onClick={onClick} >
       <FontAwesomeIcon icon={faLocationCrosshairs}/>
     </button>
   )

@@ -1,8 +1,7 @@
 import "./MapLoading.css"
-export default function MapLoading() {
 
+const MapLoading = () => {
     const rotations = [0, 60, 120, 180, 240, 300]
-
     return (
         <div className="outer">
             <div className="inner">
@@ -16,3 +15,5 @@ export default function MapLoading() {
         </div>
     )
 }
+
+export default MapLoading

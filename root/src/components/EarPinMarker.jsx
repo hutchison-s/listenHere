@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { Marker, Popup } from 'react-leaflet'
-import { Icon } from 'leaflet'
+import { earIcon } from '../assets/icons'
 import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
@@ -8,12 +8,8 @@ import AudioControlButton from './AudioControlButton'
 import { useContext, useEffect, useState } from 'react'
 import {UserContext} from '../contexts/UserContext'
 import {AudioPlayerContext} from '../contexts/AudioPlayerContext'
-import axios from 'axios'
-
-const earIcon = new Icon({
-  iconUrl: "/earpin.png",
-  iconSize: [50, 50]
-});
+import { base64toBlob, timestampToString } from '../utils/utilFuncions'
+import { togglePinLike } from '../api/apiCalls'
 
 function EarPinMarker({pin}) {
 
@@ -27,39 +23,8 @@ function EarPinMarker({pin}) {
       }
     }, [])
 
-    const likePin = ()=>{
-      if (isLiked) {
-        axios.put('https://listen-here-api.onrender.com/pins/'+pin._id+"/unlike", {userId: profile._id})
-          .then(res => {
-            console.log(res.data)
-            setIsLiked(false)
-          }).catch(err => {
-            console.log("Error unliking pin:", err)
-          })
-      } else {
-        console.log("attempting like")
-        axios.post('https://listen-here-api.onrender.com/pins/'+pin._id+"/like", {userId: profile._id})
-          .then(res => {
-            console.log(res.data)
-            setIsLiked(true)
-          }).catch(err => {
-            console.log("Error liking pin:", err)
-          })
-      }
-      
-    }
-    
-    const base64toBlob = (base64Data) => {
-      const base64EncodedString = base64Data.split(';base64,')[1];
-      const binaryData = atob(base64EncodedString);
-      const arrayBuffer = new ArrayBuffer(binaryData.length);
-      const uint8Array = new Uint8Array(arrayBuffer);
-      for (let i = 0; i < binaryData.length; i++) {
-        uint8Array[i] = binaryData.charCodeAt(i);
-      }
-      const blobData = new Blob([arrayBuffer], { type: 'audio/mpeg3' });
-
-      return blobData
+    const likeThisPin = ()=>{
+      togglePinLike(pin, profile, isLiked, setIsLiked)
     }
     
     return (
@@ -88,8 +53,8 @@ function EarPinMarker({pin}) {
             </div>
               <p>{pin.desc}</p>
             <div className='popupFooter'>
-              <p><small>{pin.timestamp}</small></p>
-              <div className={isLiked ? "likes liked" : "likes"} onClick={likePin}>
+              <p><small>{timestampToString(pin.timestamp)}</small></p>
+              <div className={isLiked ? "likes liked" : "likes"} onClick={likeThisPin}>
                 <FontAwesomeIcon icon={faHeart} />
                 <span>{pin.likedBy.length}</span>
               </div>

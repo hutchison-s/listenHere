@@ -1,14 +1,10 @@
-import { Icon } from 'leaflet';
+import { youIcon } from '../assets/icons';
 import { Marker, Popup } from 'react-leaflet';
 import { useContext } from 'react';
 import { LocationContext } from '../contexts/LocationContext';
 
 const YouAreHere = () => {
     const {location} = useContext(LocationContext)
-    const youIcon = new Icon({
-        iconUrl: "/person-rays-solid.svg",
-        iconSize: [30, 30]
-      });
 
   return (
     <Marker 

@@ -13,8 +13,7 @@ const ConnectionCard = ({viewingProfile}) => {
     useEffect(()=>{
         if (newPins == 0) {
             if (viewingProfile.pins.length > 0) {
-                const {pinList} = viewingProfile.pins;
-                pinList.forEach(id => {
+                viewingProfile.pins.forEach(id => {
                     if (!profile.viewed.includes(id)) {
                         setNewPins((newPins => newPins+1))
                     }

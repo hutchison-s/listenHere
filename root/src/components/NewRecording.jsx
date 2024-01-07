@@ -1,12 +1,13 @@
 import "./NewRecording.css"
 import { useContext, useState } from "react"
 import {UserContext} from '../contexts/UserContext'
+import { convertBlobToBase64, initiateAudioRecorder } from "../utils/utilFuncions"
 import AudioControlButton from "./AudioControlButton"
 import RecordingForm from "./RecordingForm"
 import RecordButton from "./RecordButton"
 import { LocationContext } from "../contexts/LocationContext"
 import { AudioPlayerContext } from "../contexts/AudioPlayerContext"
-import axios from "axios"
+import { createPin } from "../api/apiCalls"
 
 export default function NewRecording() {
 
@@ -19,77 +20,53 @@ export default function NewRecording() {
     const {profile} = useContext(UserContext)
     const chunks = [];
 
-    function initiateStream() {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({audio: true})
-                .then((stream) => {
-                    const mediaRecorder = new MediaRecorder(stream)
-                    mediaRecorder.ondataavailable = (e)=>{chunks.push(e.data)}
-                    mediaRecorder.onstop = ()=>{
-                        const blob = new Blob(chunks, { type: "audio/mpeg3" });
-                        setTempBlob(blob)
-                        chunks.length = 0;
-                        setSrcBlob(blob);
-                    }
-                    setStreamer(mediaRecorder)
-                    console.log(mediaRecorder)
-                })
-                .catch((err) => {
-                    console.error(`The following getUserMedia error occurred: ${err}`);
-                    alert("Microphone access not allowed. Please check your device's settings.")
-                });
-        } else {
-            console.log("getUserMedia not supported on your browser!");
-        }
+    function newRecorder() {
+        initiateAudioRecorder(
+            (e)=>{chunks.push(e.data)},
+            ()=>{
+                const blob = new Blob(chunks, { type: "audio/mpeg3" });
+                setTempBlob(blob)
+                chunks.length = 0;
+                setSrcBlob(blob);
+            },
+            (newRecorder)=>{
+                setStreamer(newRecorder)
+                console.log(newRecorder)
+            }
+        )
     }
-
-    const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
-        const reader = new FileReader;
-        reader.onerror = reject;
-        reader.onload = () => {
-            resolve(reader.result);
-        };
-        reader.readAsDataURL(blob);
-    });
-
     
     const onSubmit = async (e)=>{
         e.preventDefault()
         console.log(tempBlob)
         console.log(e.target.newDesc)
+        const creator = {id: profile._id, displayName: profile.displayName}
         const isLimited = e.target.viewLimit.value != "unlimited"
         const tags = e.target.tags.value == ''
-            ? null
+            ? []
             : e.target.tags.value.split(",").map(x=>x.toLowerCase().trim())
         const base64Data = await convertBlobToBase64(tempBlob)
-        // const bufArray = await tempBlob.arrayBuffer()
-        // const binaryData = new Uint8Array(bufArray)
-        // const base64Data = btoa(String.fromCharCode.apply(null, binaryData));
 
         const newPin = {
-            creator: {id: profile._id, displayName: profile.displayName}, 
+            creator: creator, 
             title: e.target.newTitle.value, 
             desc: e.target.newDesc.value,
             timestamp: new Date().toString(), 
             latlng: location, 
             data: base64Data,
+            tags: tags,
             viewLimit: {
                 isLimited: isLimited,
                 limit: isLimited ? parseInt(e.target.viewLimit.value) : 0
             }
         }
 
-        if (tags) {newPin.tags = tags}
-
-        axios.post('https://listen-here-api.onrender.com/pins', newPin)
-            .then(res => {
-                console.log("Successfully added:", res.data)
-                setTempBlob(null);
-                setIsExpanded(false);
-                setStreamer(null)
-            }).catch(err => {
-                console.log("Error creating pin:", err)
-            })
+        createPin(newPin, (doc)=>{
+            console.log("Successfully added:", doc)
+            setTempBlob(null);
+            setIsExpanded(false);
+            setStreamer(null)
+        })
         
     }
 
@@ -123,7 +100,7 @@ export default function NewRecording() {
                 onClick={()=>{
                     setIsExpanded(!isExpanded)
                     if (!streamer) {
-                        initiateStream()
+                        newRecorder()
                     } else {
                         setStreamer(null)
                     }
