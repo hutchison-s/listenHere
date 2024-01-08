@@ -50,8 +50,6 @@ export default function NewRecording() {
     
     const onSubmit = async (e)=>{
         e.preventDefault()
-        console.log(tempBlob)
-        console.log(e.target.newDesc)
         const creator = {id: profile._id, displayName: profile.displayName}
         const isLimited = e.target.viewLimit.value != "unlimited"
         const tags = e.target.tags.value == ''
@@ -64,7 +62,7 @@ export default function NewRecording() {
             title: e.target.newTitle.value, 
             desc: e.target.newDesc.value,
             timestamp: new Date().now(), 
-            latlng: {lat, lng}, 
+            latlng: {lat: lat, lng: lng}, 
             data: base64Data,
             tags: tags,
             viewLimit: {
