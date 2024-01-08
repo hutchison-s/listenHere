@@ -105,7 +105,7 @@ app.get('/pins/:id', async (req, res) => {
 
 // Create New Pin and add to creator's pin array
 app.post('/pins', async (req, res) => {
-    const {latlng, title, creator, data, timestamp} = req.body;
+    const {latlng, title, creator, data, timestamp, viewLimit} = req.body;
 
     if (!latlng || !title || !creator || !data) {
         return res.status(400).json({error: "Required values missing. Required values are {latlng: [Number], title: String, creator: ObjectId, data: Buffer}."})
@@ -116,6 +116,7 @@ app.post('/pins', async (req, res) => {
         latlng: latlng,
         timestamp: timestamp,
         data: data,
+        viewLimit: viewLimit
     }
     if (req.body.tags) {pinObject.tags = req.body.tags}
     if (req.body.desc) {pinObject.desc = req.body.desc}
