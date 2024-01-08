@@ -33,6 +33,10 @@
 .likes.liked {
     color: red;
 }
+.viewsRemaining {
+    text-decoration: none;
+    color: var(--jet);
+}
 
 .popupHeader #pausePlay {
     border-radius: 50%;

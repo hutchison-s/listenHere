@@ -349,6 +349,7 @@ app.post('/pins/:id/view', async (req, res) => {
     const { id } = req.params
     const { userId } = req.body
 
+    // log view
     try {
         const updatedPin = await EarPin.findByIdAndUpdate(
             id,
@@ -357,15 +358,6 @@ app.post('/pins/:id/view', async (req, res) => {
         )
         if (!updatedPin) {
             return res.status(404).json({error: "Pin not found"})
-        }
-        if (updatedPin.viewLimit.isLimited) {
-            const limit = updatedPin.viewLimit.limit - 1
-            if (limit > 0) {
-                await EarPin.findByIdAndUpdate(id, {viewLimit: limit})
-            } else {
-                await EarPin.findByIdAndDelete(id)
-                return res.json({message: "View limit reached. Pin deleted"})
-            }
         }
         const updatedUser = await User.findByIdAndUpdate(
             userId,
@@ -376,6 +368,26 @@ app.post('/pins/:id/view', async (req, res) => {
         if (!updatedUser) {
             return res.status(404).json({ error: 'User not found' });
         }
+
+        // limit handling
+        if (updatedPin.viewLimit.isLimited) {
+            const limit = updatedPin.viewLimit.limit - 1
+            if (limit > 0) {
+                await EarPin.findByIdAndUpdate(id, {viewLimit: {viewLimit: true, limit: limit}})
+            } else {
+                const deleted = await EarPin.findByIdAndDelete(id)
+                const updatedCreator = await User.findByIdAndUpdate(
+                    deleted.creator.id, 
+                    {$pull: {pins: deleted._id}},
+                    {new: true}
+                    )
+                    if (!updatedCreator) {
+                        return res.status(404).json({ error: 'Error removing pin from user profile.' });
+                      }
+                return res.json({message: "View limit reached. Pin deleted"})
+            }
+        }
+        
         res.json({message: "Pin view logged successfully"})
     } catch (err) {
         res.status(500).json({error: err.message})

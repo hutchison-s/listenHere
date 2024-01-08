@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import { AudioPlayerContext } from '../contexts/AudioPlayerContext'
@@ -32,10 +31,6 @@ const AudioControlButton = () => {
         {isPlaying ? <FontAwesomeIcon icon={faPause}/> : <FontAwesomeIcon icon={faPlay}/>}
     </button>
   )
-}
-
-AudioControlButton.propTypes = {
-    audioRef: PropTypes.object
 }
 
 export default AudioControlButton

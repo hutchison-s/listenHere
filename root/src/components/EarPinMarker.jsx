@@ -32,12 +32,14 @@ function EarPinMarker({pin}) {
             const b = base64toBlob(thisPin.data)
             setSrcBlob(b);
             console.log("sent source")
-            viewPin(thisPin, profile, ({message})=>{
-              console.log(message)
-            })
             updateProfile()
           },
-          popupclose: ()=>{audioRef && audioRef.current.pause()}
+          popupclose: ()=>{
+            audioRef && audioRef.current.pause()
+            viewPin(pin, profile, ({message})=>{
+              console.log(message)
+            })
+          }
         }}
       >
         <Popup>
@@ -48,6 +50,7 @@ function EarPinMarker({pin}) {
                 <Link to={profile._id == thisPin.creator.id ? '/account' : `/users/${thisPin.creator.id}`}>
                   <h3><em>{thisPin.creator.displayName}</em></h3>
                 </Link>
+                {thisPin.viewLimit.isLimited ? <p className='viewsRemaining'>{thisPin.viewLimit.limit} views remaining</p> : null}
               </div>
               <AudioControlButton />
             </div>
