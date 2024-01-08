@@ -373,7 +373,7 @@ app.post('/pins/:id/view', async (req, res) => {
         if (updatedPin.viewLimit.isLimited) {
             const limit = updatedPin.viewLimit.limit - 1
             if (limit > 0) {
-                await EarPin.findByIdAndUpdate(id, {viewLimit: {viewLimit: true, limit: limit}})
+                await EarPin.findByIdAndUpdate(id, {viewLimit: {isLimited: true, limit: limit}})
             } else {
                 const deleted = await EarPin.findByIdAndDelete(id)
                 const updatedCreator = await User.findByIdAndUpdate(
