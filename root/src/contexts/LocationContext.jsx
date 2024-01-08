@@ -11,15 +11,16 @@ const locationReducer = (state, action) => {
                 ...state,
                 lat: action.payload.latitude,
                 lng: action.payload.longitude,
+                heading: action.payload.heading || 'No heading available',
                 lastUpdated: action.payload.timestamp
             };
-        case 'updateOrientation':
-            console.log('orientation update fired', action.payload.heading)
-            return {
-                ...state,
-                heading: action.payload.heading,
-                timestamp: action.payload.timestamp
-            };
+        // case 'updateOrientation':
+        //     console.log('orientation update fired', action.payload.heading)
+        //     return {
+        //         ...state,
+        //         heading: action.payload.heading,
+        //         timestamp: action.payload.timestamp
+        //     };
         case 'toggleTracking':
             status = action.payload ? 'on' : 'off'
             console.log("tracking turned", status)
@@ -44,20 +45,21 @@ const initialLocation = {
 }
 
 let locationWatcher;
-let orientationWatcher;
+// let orientationWatcher;
 
-function grantPermission() {
-            // feature detect
-            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-              DeviceOrientationEvent.requestPermission()
-                .then(permissionState => {
-                  console.log("orientation permission:", permissionState)
-                })
-                .catch(console.error);
-            } else {
-              // handle regular non iOS 13+ devices
-            }
-          }
+// function grantPermission() {
+//             // feature detect
+//             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+//               DeviceOrientationEvent.requestPermission()
+//                 .then(permissionState => {
+//                   console.log("orientation permission:", permissionState)
+//                 })
+//                 .catch(console.error);
+//             } else {
+//               // handle regular non iOS 13+ devices
+//             }
+//           }
+
 // eslint-disable-next-line react/prop-types
 export const LocationProvider = ({children}) => {
 
@@ -66,12 +68,12 @@ export const LocationProvider = ({children}) => {
 
     const [location, dispatch] = useReducer(locationReducer, initialLocation)
 
-    useEffect(()=>{
-        let confirmed = confirm('Use device orientation?')
-        if (confirmed) {
-            grantPermission()
-        }
-    }, [])
+    // useEffect(()=>{
+    //     let confirmed = confirm('Use device orientation?')
+    //     if (confirmed) {
+    //         grantPermission()
+    //     }
+    // }, [])
 
     useEffect(()=>{
         if (location.tracking) {
@@ -79,23 +81,23 @@ export const LocationProvider = ({children}) => {
             locationWatcher = navigator.geolocation.watchPosition((position)=>{
 
                 console.log("from watcher:",position)
-                const {latitude, longitude} = position.coords;
+                const {latitude, longitude, heading} = position.coords;
                 const {timestamp} = position
-                dispatch({type: 'updateLocation', payload: {latitude, longitude, timestamp}})
+                dispatch({type: 'updateLocation', payload: {latitude, longitude, heading, timestamp}})
             }, (error)=>{
                 dispatch({type: 'error', payload: {error}})
             }, {enableHighAccuracy: true})
 
-            orientationWatcher = window.addEventListener('deviceorientation', (e)=>{
-                const heading = e.alpha
-                dispatch({type: 'updateOrientation', payload: {heading, timestamp: Date.now()}})
-            })
+            // orientationWatcher = window.addEventListener('deviceorientation', (e)=>{
+            //     const heading = e.alpha
+            //     dispatch({type: 'updateOrientation', payload: {heading, timestamp: Date.now()}})
+            // })
         }
         
 
         return ()=>{
             navigator.geolocation.clearWatch(locationWatcher);
-            window.removeEventListener('deviceorientation', orientationWatcher)
+            // window.removeEventListener('deviceorientation', orientationWatcher)
         }
     }, [location.tracking])
 
