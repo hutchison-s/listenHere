@@ -17,7 +17,7 @@ const locationReducer = (state, action) => {
             console.log('orientation update fired', action.payload.heading)
             return {
                 ...state,
-                heading: action.payload.heading || 0,
+                heading: action.payload.heading,
                 timestamp: action.payload.timestamp
             };
         case 'toggleTracking':
@@ -38,7 +38,7 @@ const locationReducer = (state, action) => {
 const initialLocation = {
     lat: null,
     lng: null,
-    heading: 0,
+    heading: null,
     lastUpdated: Date.now(),
     tracking: true
 }
@@ -46,6 +46,18 @@ const initialLocation = {
 let locationWatcher;
 let orientationWatcher;
 
+function grantPermission() {
+            // feature detect
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+              DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                  console.log("orientation permission:", permissionState)
+                })
+                .catch(console.error);
+            } else {
+              // handle regular non iOS 13+ devices
+            }
+          }
 // eslint-disable-next-line react/prop-types
 export const LocationProvider = ({children}) => {
 
@@ -54,7 +66,12 @@ export const LocationProvider = ({children}) => {
 
     const [location, dispatch] = useReducer(locationReducer, initialLocation)
 
-        
+    useEffect(()=>{
+        let confirmed = confirm('Use device orientation?')
+        if (confirmed) {
+            grantPermission()
+        }
+    }, [])
 
     useEffect(()=>{
         if (location.tracking) {
