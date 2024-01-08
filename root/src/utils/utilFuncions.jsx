@@ -25,6 +25,9 @@ export const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
 // @desc Converts toString() timestamp to readable time-date string
 export const timestampToString = (timestamp) => {
     const date = new Date(timestamp)
+    if (date.toLocaleTimeString() == 'Invalid Date') {
+      console.log("could not convert", timestamp, "to date object")
+    }
     return `${date.toLocaleTimeString()} ${date.toDateString()}`
   }
 

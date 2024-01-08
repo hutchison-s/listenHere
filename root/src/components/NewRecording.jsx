@@ -55,13 +55,13 @@ export default function NewRecording() {
             ? []
             : e.target.tags.value.split(",").map(x=>x.toLowerCase().trim())
         const base64Data = await convertBlobToBase64(tempBlob)
-
+        const {lat, lng} = location
         const newPin = {
             creator: creator, 
             title: e.target.newTitle.value, 
             desc: e.target.newDesc.value,
-            timestamp: new Date().toString(), 
-            latlng: location, 
+            timestamp: new Date().now(), 
+            latlng: {lat, lng}, 
             data: base64Data,
             tags: tags,
             viewLimit: {

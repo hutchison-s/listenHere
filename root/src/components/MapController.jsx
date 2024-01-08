@@ -6,14 +6,15 @@ const MapController = () => {
     const {location} = useContext(LocationContext)
     const map = useMap()
 
-    useEffect(()=>{
-      console.log("Panning map to current location")
-      map.locate({setView: true, enableHighAccuracy: true})
-    }, [])
+    // useEffect(()=>{
+    //   console.log("Panning map to current location")
+    //   map.locate({setView: true, enableHighAccuracy: true})
+    // }, [])
 
     useEffect(()=>{
+      const {lat, lng} = location
       console.log("Panning map to current location")
-      map.panTo(location, {duration: 0.5, animate: true})
+      map.panTo({lat, lng}, {duration: 0.5, animate: true})
     }, [location])
 
         return null;

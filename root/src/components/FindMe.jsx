@@ -10,7 +10,8 @@ const FindMe = () => {
     const {location} = useContext(LocationContext)
 
     const onClick = ()=>{
-        map.flyTo(location, 18, {animate: true})
+      const {lat, lng} = location;
+        map.flyTo({lat, lng}, 18, {animate: true})
     }
   return (
     <button id='findMe' onClick={onClick} >
