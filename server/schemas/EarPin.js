@@ -7,7 +7,7 @@ const pinSchema = new mongoose.Schema(
             displayName: {type: String, required: true}
         },
         title: {type: String, required: true},
-        timestamp: {type: String, required: true},
+        timestamp: {type: Number, required: true},
         latlng: {
             lat: {type: Number, required: true}, 
             lng: {type: Number, required: true}
