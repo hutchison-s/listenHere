@@ -11,27 +11,29 @@ function MySounds() {
     const [isFeatured, setIsFeatured] = useState('')
 
     useEffect(()=>{
-        if (userPins.length == 0) {
-            if (profile.pins.length > 0) {
-                profile.pins.forEach((id) => {
-                    getPin(id, (doc)=>{
-                        setUserPins([...userPins, doc])
-                    })
+        if (profile.pins.length > 0) {
+            profile.pins.forEach((id) => {
+                getPin(id, (doc)=>{
+                    setUserPins([...userPins, doc])
                 })
-            } else {
-                console.log("No pins associated with user")
-            }
+            })
         } else {
-            if (profile.pins.length > 0) {
-                profile.pins.filter(p => !userPins.map(doc=>doc._id).includes(p)).forEach((id) => {
-                    getPin(id, (doc)=>{
-                        setUserPins([...userPins, doc])
-                    })
+            console.log("No pins associated with user")
+        }
+    }, [])
+
+    useEffect(()=>{
+        if (profile.pins.length > 0) {
+            const existingPins = userPins.map(doc=>doc._id)
+            const newPins = profile.pins.filter(id => !existingPins.includes(id))
+            newPins.forEach((id) => {
+                getPin(id, (doc)=>{
+                    setUserPins([...userPins, doc])
                 })
-            } else {
-                console.log("No pins associated with user")
-                setUserPins([])
-            }
+            })
+        } else {
+            console.log("No pins associated with user")
+            setUserPins([])
         }
     }, [profile])
 

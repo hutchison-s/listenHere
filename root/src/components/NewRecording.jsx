@@ -1,5 +1,5 @@
 import "./NewRecording.css"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {UserContext} from '../contexts/UserContext'
 import { convertBlobToBase64 } from "../utils/utilFuncions"
 import AudioControlButton from "./AudioControlButton"
@@ -11,7 +11,7 @@ import { createPin } from "../api/apiCalls"
 
 export default function NewRecording() {
 
-    const {location} = useContext(LocationContext)
+    const {location, dispatch} = useContext(LocationContext)
     const {setSrcBlob} = useContext(AudioPlayerContext)
 
     const [isExpanded, setIsExpanded] = useState(false)
@@ -20,6 +20,9 @@ export default function NewRecording() {
     const {profile, updateProfile} = useContext(UserContext)
     const chunks = [];
 
+    useEffect(()=>{
+        dispatch({type: 'toggleTracking', payload: !isExpanded})
+    }, [isExpanded])
 
     const initiateAudioRecorder = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -110,7 +113,7 @@ export default function NewRecording() {
                 onClick={()=>{
                     setIsExpanded(!isExpanded)
                     if (!streamer) {
-                        initiateAudioRecorder()
+                        initiateAudioRecorder()        
                     } else {
                         setStreamer(null)
                     }
