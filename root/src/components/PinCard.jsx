@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { getUser } from "../api/apiCalls";
+import { getUser, getPin } from "../api/apiCalls";
 import { base64toBlob, timestampToString } from "../utils/utilFuncions";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
@@ -8,25 +8,31 @@ import AudioControlButton from './AudioControlButton'
 import LikeComponent from "./LikeComponent";
 import DeleteButton from './DeleteButton'
 
-const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
+const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
     const {profile} = useContext(UserContext)
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
     const [isLiked, setIsLiked] = useState(false)
     const [likedBy, setLikedBy] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
     const [isExpanded, setIsExpanded] = useState(false)
+    const [pin, setPin] = useState(null)
 
     useEffect(()=> {
-      if (profile.liked.includes(pin._id)) {
-        setIsLiked(true)
-      }
-      if (likedBy.length == 0) {
-        for (let id of pin.likedBy) {
-          getUser(id, (doc => {
-            setLikedBy([...likedBy, doc])
-          }))
-        }
-      }
+      getPin(pinId, (thisPin)=>{
+          console.log('retrieved', thisPin.title)
+          setPin(thisPin)
+          if (profile.liked.includes(thisPin._id)) {
+              setIsLiked(true)
+            }
+            if (likedBy.length == 0) {
+              for (let id of thisPin.likedBy) {
+                getUser(id, (doc => {
+                  setLikedBy([...likedBy, doc])
+                }))
+              }
+            }
+      })
+      
     }, [])
 
     const loadThis = ()=>{
@@ -43,7 +49,8 @@ const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
     }
 
   return (
-    <div className="pinCard" onClick={()=>{
+    pin 
+    ? <div className="pinCard" onClick={()=>{
             if (isFeatured !== pin._id) {
                 loadThis()
                 setIsFeatured(pin._id)
@@ -81,11 +88,17 @@ const PinCard = ({ pin, isFeatured, setIsFeatured }) => {
         </div>
       }
     </div>
+    : <div className="pinCard">
+      <div className="pinCarLeft"><p> </p></div>
+      <div className="pinCardMiddle"><h3>...</h3></div>
+      <div className="pinCardRight"><p> </p></div>
+      <div className="pinCardFooter"><p><small>...</small></p></div>
+    </div>
   );
 };
 
 PinCard.propTypes = {
-  pin: PropTypes.object,
+  pinId: PropTypes.string,
   isFeatured: PropTypes.string,
   setIsFeatured: PropTypes.func
 };

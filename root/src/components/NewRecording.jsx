@@ -22,7 +22,7 @@ export default function NewRecording() {
 
     useEffect(()=>{
         dispatch({type: 'toggleTracking', payload: !isExpanded})
-    }, [isExpanded])
+    }, [isExpanded, dispatch])
 
     const initiateAudioRecorder = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
