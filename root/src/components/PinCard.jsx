@@ -32,8 +32,18 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
               }
             }
       })
-      
     }, [])
+
+    useEffect(()=>{
+      if (pin) {
+          if (isFeatured == pin._id) {
+          loadThis()
+        } else {
+          setIsLoaded(false)
+        }
+      }
+      
+    }, [pin, isFeatured])
 
     const loadThis = ()=>{
       audioRef.current.pause()
@@ -44,25 +54,27 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
   }
     const LoadLogo = ()=>{
         return (
-            <img src="/earpin.png" alt="Listen Hear Icon" width='40px' />
+            <img src="/earpin.png" alt="Listen Hear Icon" width='40px' onClick={()=>{
+              setIsFeatured(pin._id)
+              setIsExpanded(true)
+            }}/>
         )
     }
 
   return (
     pin 
-    ? <div className="pinCard" onClick={()=>{
-            if (isFeatured !== pin._id) {
-                loadThis()
-                setIsFeatured(pin._id)
-            } else {
-                audioRef.current.pause()
-                setIsFeatured(null)
-            }
-        }}>
+    ? <div className="pinCard">
       <div className="pinCardLeft">
-        {isLoaded && isFeatured == pin._id ? <AudioControlButton /> : <LoadLogo />}
+        {isLoaded ? <AudioControlButton /> : <LoadLogo />}
       </div>
-      <div className="pinCardMiddle" onClick={()=>{setIsExpanded((isExpanded)=>!isExpanded)}}>
+      <div className="pinCardMiddle" onClick={()=>{
+          setIsExpanded((isExpanded)=>!isExpanded)
+          if (isFeatured !== pin._id) {
+            setIsFeatured(pin._id)
+          } else {
+            audioRef.current.pause()
+            setIsFeatured(null)}
+        }}>
         <h3>{pin.title}</h3>
         <p>
           <em>{pin.desc && pin.desc.substring(0, 25)+"..."}</em>

@@ -15,7 +15,8 @@ const AudioControlButton = () => {
     audioRef.current.onpause = () =>{
         setIsPlaying(false)
     }
-    const onClick = ()=>{
+    const onClick = (e)=>{
+      e.preventDefault()
       if (isPlaying) {
         audioRef.current.pause()
       } else {
