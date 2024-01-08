@@ -68,7 +68,7 @@ export const deletePin = (id, callback) => {
 }
 
 export const viewPin = (pin, profile, callback) => {
-    if (!profile.viewed.includes(pin._id)) {
+    if (!profile.viewed.includes(pin._id) && pin.creator.id !== profile._id) {
         console.log("attempting view update")
         axios.post(pinsURL+pin._id+"/view", {userId: profile._id})
             .then(res => {

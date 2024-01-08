@@ -20,6 +20,16 @@
     font-size: 16px;
 }
 
+label:has(#remember) {
+  display: flex;
+  justify-content: center;
+}
+
+#loginForm #remember {
+  width: unset;
+  margin: 0 0.5rem;
+}
+
 #loginForm button.enter,
 #loginForm button.new {
     background-color: var(--yellow);

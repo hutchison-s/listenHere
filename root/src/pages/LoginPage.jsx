@@ -2,7 +2,7 @@ import './Login.css'
 import {UserContext} from '../contexts/UserContext'
 import { useContext, useEffect, useState, useRef } from 'react'
 import { auth, googleProvider } from '../config/firebase'
-import { createUserWithEmailAndPassword, signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithPopup, signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence, setPersistence } from 'firebase/auth'
 import { Navigate } from 'react-router-dom'
 
 function LoginPage() {
@@ -10,9 +10,16 @@ function LoginPage() {
   const [email, setEmail] = useState(null)
   const [pass, setPass] = useState(null)
   const [user, setUser] = useState(null)
+  const [rememberMe, setRememberMe] = useState(false)
 
   const {profile, getProfileFromUser} = useContext(UserContext)
   const dialogRef = useRef(null)
+
+  useEffect(()=>{
+    if (localStorage['firebase:authUser:AIzaSyBIFnE9a5XGHULxSfXgqdzvluNPSc-Wsic:[DEFAULT]']) {
+      setUser(JSON.parse(localStorage['firebase:authUser:AIzaSyBIFnE9a5XGHULxSfXgqdzvluNPSc-Wsic:[DEFAULT]']))
+    }
+  }, [])
 
   useEffect(()=>{
     if (user) {
@@ -23,6 +30,10 @@ function LoginPage() {
   const logInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider)
+      const persistenceType = rememberMe
+        ? browserLocalPersistence
+        : browserSessionPersistence;
+      await setPersistence(auth, persistenceType);
       setUser(auth.currentUser)
       console.log(auth.currentUser)
     } catch (err) {
@@ -34,6 +45,10 @@ function LoginPage() {
     e.preventDefault()
       try {
         await signInWithEmailAndPassword(auth, email, pass)
+        const persistenceType = rememberMe
+        ? browserLocalPersistence
+        : browserSessionPersistence;
+        await setPersistence(auth, persistenceType);
         setUser(auth.currentUser)
         console.log(auth.currentUser)
       } catch (err) {
@@ -48,6 +63,10 @@ function LoginPage() {
         displayName: displayName,
         email: auth.currentUser.email
       }
+      const persistenceType = rememberMe
+        ? browserLocalPersistence
+        : browserSessionPersistence;
+      await setPersistence(auth, persistenceType);
       setUser(newUserObject)
       console.log(auth.currentUser)
     } catch (err) {
@@ -105,6 +124,10 @@ function LoginPage() {
               <span style={{display: "none"}}>Sign in with Google</span>
             </div>
           </button>
+          <label htmlFor="remember">
+              <input type="checkbox" name="remember" id="remember" onChange={(e)=>{setRememberMe(e.target.checked)}}/> 
+              <span>Remember me</span>
+            </label>
           <p>or...</p>
            <input type="email" name="newEmail" id="newEmail" placeholder='Email...' onChange={(e)=>{setEmail(e.target.value)}}/>
             <input type="password" name="newPassword" id="newPassword" placeholder='Password...' onChange={(e)=>{setPass(e.target.value)}}/>
