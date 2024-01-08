@@ -11,7 +11,6 @@ import DeleteButton from './DeleteButton'
 const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
     const {profile} = useContext(UserContext)
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
-    const [isLiked, setIsLiked] = useState(false)
     const [likedBy, setLikedBy] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
     const [isExpanded, setIsExpanded] = useState(false)
@@ -21,26 +20,25 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
       getPin(pinId, (thisPin)=>{
           console.log('retrieved', thisPin.title)
           setPin(thisPin)
-          if (profile.liked.includes(thisPin._id)) {
-              setIsLiked(true)
-            }
-            if (likedBy.length == 0) {
-              for (let id of thisPin.likedBy) {
-                getUser(id, (doc => {
-                  setLikedBy([...likedBy, doc])
-                }))
-              }
-            }
       })
-    }, [])
+    }, [profile])
 
     useEffect(()=>{
       if (pin) {
-          if (isFeatured == pin._id) {
+        if (isFeatured == pin._id) {
           loadThis()
+          for (let id of pin.likedBy) {
+            getUser(id, (doc => {
+              setLikedBy([...likedBy, doc])
+            }))
+          }
         } else {
           setIsLoaded(false)
         }
+      }
+
+      return ()=>{
+        setLikedBy([])
       }
       
     }, [pin, isFeatured])
@@ -81,7 +79,7 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
         </p>
       </div>
       <div className="pinCardRight">
-        <LikeComponent pin={pin} profile={profile} isLiked={isLiked} setIsLiked={setIsLiked}/>
+        <LikeComponent pin={pin} profile={profile} />
         <DeleteButton pin={pin}/>
       </div>
       <div className="pinCardFooter">
@@ -92,10 +90,10 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
       {isExpanded && 
         <div className="details">
             <div className="tagsBox">Tags: {pin.tags.map((tag, idx) => <span key={idx+tag}>{tag}</span>)}</div>
-            <div className="likedBy">
+            {likedBy.length > 0 && <div className="likedBy">
                 Liked by: {likedBy.map((p, idx) => {
                 return <span key={idx+p._id}>{p.displayName}</span>})
-            }</div>
+            }</div>}
             <div className="location">Location: <span>Lat: {pin.latlng.lat}<br/>Lng: {pin.latlng.lng}</span></div>
         </div>
       }

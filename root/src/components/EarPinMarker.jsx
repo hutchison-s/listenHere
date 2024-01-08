@@ -8,30 +8,31 @@ import {UserContext} from '../contexts/UserContext'
 import {AudioPlayerContext} from '../contexts/AudioPlayerContext'
 import { base64toBlob, timestampToString } from '../utils/utilFuncions'
 import LikeComponent from './LikeComponent'
-import { viewPin } from '../api/apiCalls'
+import { viewPin, getPin } from '../api/apiCalls'
 
 function EarPinMarker({pin}) {
 
     const {profile, updateProfile} = useContext(UserContext)
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
-    const [isLiked, setIsLiked] = useState(false)
+    const [thisPin, setThisPin] = useState(null)
 
     useEffect(()=> {
-      if (profile.liked.includes(pin._id)) {
-        setIsLiked(true)
-      }
+      getPin(pin._id, (doc)=>{
+          console.log('retrieved', doc)
+          setThisPin(doc)
+      })
     }, [profile])
     
     return (
-      <Marker 
-        position={pin.latlng} 
+      thisPin ? <Marker 
+        position={thisPin.latlng} 
         icon={earIcon} 
         eventHandlers={{
           popupopen: ()=>{
-            const b = base64toBlob(pin.data)
+            const b = base64toBlob(thisPin.data)
             setSrcBlob(b);
             console.log("sent source")
-            viewPin(pin, profile, ({message})=>{
+            viewPin(thisPin, profile, ({message})=>{
               console.log(message)
             })
             updateProfile()
@@ -43,21 +44,21 @@ function EarPinMarker({pin}) {
           <div>
             <div className='popupHeader'>
               <div>
-                <h2>{pin.title}</h2>
-                <Link to={profile._id == pin.creator.id ? '/account' : `/users/${pin.creator.id}`}>
-                  <h3><em>{pin.creator.displayName}</em></h3>
+                <h2>{thisPin.title}</h2>
+                <Link to={profile._id == thisPin.creator.id ? '/account' : `/users/${thisPin.creator.id}`}>
+                  <h3><em>{thisPin.creator.displayName}</em></h3>
                 </Link>
               </div>
               <AudioControlButton />
             </div>
-              <p>{pin.desc}</p>
+              <p>{thisPin.desc}</p>
             <div className='popupFooter'>
-              <p><small>{timestampToString(pin.timestamp)}</small></p>
-              <LikeComponent pin={pin} profile={profile} isLiked={isLiked} setIsLiked={setIsLiked} />
+              <p><small>{timestampToString(thisPin.timestamp)}</small></p>
+              <LikeComponent pin={thisPin} profile={profile} />
             </div>
           </div>
         </Popup>
-      </Marker>
+      </Marker> : null
     )
   }
   EarPinMarker.propTypes = {

@@ -5,15 +5,18 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
 import { UserContext } from '../contexts/UserContext'
 
-const LikeComponent = ({pin, profile, isLiked, setIsLiked}) => {
+const LikeComponent = ({pin, profile}) => {
     const {updateProfile} = useContext(UserContext)
+
   return (
-    <div className={isLiked ? "likes liked" : "likes"}>
+    <div className={profile.liked.includes(pin._id) ? "likes liked" : "likes"}>
           <FontAwesomeIcon
             icon={faHeart}
             onClick={() => {
-              togglePinLike(pin, profile, isLiked, setIsLiked)
-              updateProfile()
+              togglePinLike(pin, profile, (response)=>{
+                console.log(response)
+                updateProfile()
+              })
             }}
           />
           <span>{pin.likedBy.length}</span>
@@ -23,9 +26,7 @@ const LikeComponent = ({pin, profile, isLiked, setIsLiked}) => {
 
 LikeComponent.propTypes = {
     pin: PropTypes.object,
-    profile: PropTypes.object, 
-    isLiked: PropTypes.bool,
-    setIsLiked: PropTypes.func
+    profile: PropTypes.object
 }
 
 export default LikeComponent

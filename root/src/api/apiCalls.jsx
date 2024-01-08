@@ -4,30 +4,22 @@ const baseURL = 'https://listen-here-api.onrender.com/'
 const pinsURL = baseURL+'pins/'
 const usersURL = baseURL+'users/'
 
-export const togglePinLike = (pin, profile, isLiked, setIsLiked)=>{
-    if (isLiked) {
-        if (profile.liked.includes(pin._id)) {
-            axios.put(pinsURL+pin._id+"/unlike", {userId: profile._id})
-                .then(res => {
-                    console.log(res.data)
-                    setIsLiked(false)
-                }).catch(err => {
-                    console.log("Error unliking pin:", err)
-                })
-        }
-      
+export const togglePinLike = (pin, profile, callback)=>{
+    if (profile.liked.includes(pin._id)) {
+        axios.put(pinsURL+pin._id+"/unlike", {userId: profile._id})
+            .then(res => {
+                callback(res.data)
+            }).catch(err => {
+                console.log("Error unliking pin:", err)
+            })
     } else {
-        if (!profile.liked.includes(pin._id)) {
-            console.log("attempting like")
-            axios.post(pinsURL+pin._id+"/like", {userId: profile._id})
-                .then(res => {
-                    console.log(res.data)
-                    setIsLiked(true)
-                 }).catch(err => {
-                    console.log("Error liking pin:", err)
-                })
-        }
-  }
+        axios.post(pinsURL+pin._id+"/like", {userId: profile._id})
+            .then(res => {
+                callback(res.data)
+                }).catch(err => {
+                console.log("Error liking pin:", err)
+            })
+    }
 }
 
 export const getUser = (id, callback)=>{
