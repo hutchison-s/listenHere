@@ -61,7 +61,7 @@ export default function NewRecording() {
             creator: creator, 
             title: e.target.newTitle.value, 
             desc: e.target.newDesc.value,
-            timestamp: new Date().now(), 
+            timestamp: Date.now(), 
             latlng: {lat: lat, lng: lng}, 
             data: base64Data,
             tags: tags,
