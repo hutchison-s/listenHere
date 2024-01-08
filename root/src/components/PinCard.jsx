@@ -13,7 +13,6 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
     const [likedBy, setLikedBy] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
-    const [isExpanded, setIsExpanded] = useState(false)
     const [pin, setPin] = useState(null)
 
     useEffect(()=> {
@@ -54,7 +53,6 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
         return (
             <img src="/earpin.png" alt="Listen Hear Icon" width='40px' onClick={()=>{
               setIsFeatured(pin._id)
-              setIsExpanded(true)
             }}/>
         )
     }
@@ -66,7 +64,6 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
         {isLoaded ? <AudioControlButton /> : <LoadLogo />}
       </div>
       <div className="pinCardMiddle" onClick={()=>{
-          setIsExpanded((isExpanded)=>!isExpanded)
           if (isFeatured !== pin._id) {
             setIsFeatured(pin._id)
           } else {
@@ -87,7 +84,7 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
           <small>{timestampToString(pin.timestamp)}</small>
         </p>
       </div>
-      {isExpanded && 
+      {isFeatured == pin._id && 
         <div className="details">
             <div className="tagsBox">Tags: {pin.tags.map((tag, idx) => <span key={idx+tag}>{tag}</span>)}</div>
             {likedBy.length > 0 && <div className="likedBy">
