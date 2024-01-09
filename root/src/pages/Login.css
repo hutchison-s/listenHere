@@ -62,7 +62,8 @@ label:has(#remember) {
     border-radius: 14px;
 }
 
-#newUserDialog {
+#newUserDialog,
+#errorDialog {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -86,7 +87,8 @@ label:has(#remember) {
   border: 1px solid var(--jet);
   width: 70%;
 }
-#newUserDialog button {
+#newUserDialog button,
+#errorDialog button {
   padding: 0.25rem 1rem;
   font-size: 16px;
   background-color: transparent;
@@ -100,6 +102,7 @@ label:has(#remember) {
   color: var(--jet);
   border: none;
 }
+
 
 .gsi-material-button {
     -moz-user-select: none;

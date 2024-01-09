@@ -11,9 +11,11 @@ function LoginPage() {
   const [pass, setPass] = useState(null)
   const [user, setUser] = useState(null)
   const [rememberMe, setRememberMe] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const {profile, getProfileFromUser} = useContext(UserContext)
   const dialogRef = useRef(null)
+  const errorRef = useRef(null)
 
   useEffect(()=>{
     if (localStorage['firebase:authUser:AIzaSyBIFnE9a5XGHULxSfXgqdzvluNPSc-Wsic:[DEFAULT]']) {
@@ -41,6 +43,17 @@ function LoginPage() {
     }
   }
 
+  const errorMessages = {
+    'auth/email-already-exists': 'The provided email is already in use by an existing user. Each user must have a unique email.',
+    'auth/internal-error': 'The Authentication server encountered an unexpected error while trying to process the request. The error message should contain the response from the Authentication server containing additional information. If the error persists, please report the problem to our Bug Report support channel.',
+    'auth/invalid-credential': 'Incorrect login credentials',
+    'auth/invalid-email': 'Email format is invalid',
+    'auth/invalid-password': 'Password must be at least 6 characters long',
+    'auth/too-many-requests': 'Too many login attempts.',
+    'auth/user-not-found': 'There is no existing user record corresponding to the provided identifier.',
+  };
+  
+
   const logIn = async (e)=>{
     e.preventDefault()
       try {
@@ -51,17 +64,38 @@ function LoginPage() {
         await setPersistence(auth, persistenceType);
         setUser(auth.currentUser)
         console.log(auth.currentUser)
-      } catch (err) {
-        console.error(err)
+      } catch (error) {
+          if (errorMessages[error.code]) {
+            setErrorMsg(errorMessages[error.code]);
+            errorRef.current.showModal()
+            console.log(error.code)
+          } else {
+            setErrorMsg('Error occured during sign in.');
+            errorRef.current.showModal()
+            console.error('Error signing in:', error.message);
+          }
+
       }
   }
 
-  const newUser = async (displayName)=>{
+  const ErrorDialog = ()=>{
+    
+    return <dialog id='errorDialog' ref={errorRef}>
+        <p>{errorMsg}</p>
+        <button onClick={()=>{
+          errorRef.current.close()
+          setErrorMsg(null)
+        }}>Close</button>
+    </dialog>
+  }
+
+  const newUser = async (displayName, email, pass)=>{
     try {
       await createUserWithEmailAndPassword(auth, email, pass)
       const newUserObject = {
         displayName: displayName,
-        email: auth.currentUser.email
+        email: email,
+        uid: auth.currentUser.uid
       }
       const persistenceType = rememberMe
         ? browserLocalPersistence
@@ -80,23 +114,25 @@ function LoginPage() {
         <form 
           onSubmit={(e)=>{
             e.preventDefault()
-            newUser(e.target.newDisplayName.value)
+            newUser(e.target.newDisplayName.value, e.target.createEmail.value, e.target.createPassword.value)
             e.target.reset()
             dialogRef.current.close()
           }}
           onReset={()=>{
             dialogRef.current.close()
           }}>
-          <p>Please enter a display name for your profile:</p>
+          <p>Please enter information for your new profile:</p>
           <input
             type="text"
             name="newDisplayName"
             id="newDisplayName"
             pattern="[a-zA-Z0-9\s]{1,20}"
             title="Only letters, numbers and spaces, maximum length 20 characters"
-            placeholder='Display Name'
+            placeholder='Display Name...'
             required/>
-          <button type='submit'>Submit</button>
+          <input type="email" name="createEmail" id="createEmail" placeholder='Email...' />
+            <input type="password" name="createPassword" id="createPassword" placeholder='Password...' />
+              <button className="enter" type='submit'>Create Account</button>
           <button type="reset">Cancel</button>
         </form>
       </dialog>
@@ -106,7 +142,7 @@ function LoginPage() {
   return (
     !profile.authorized 
     ? <article className="gridCenter">
-         <form id="loginForm" onSubmit={logIn}>
+         <form id="loginForm">
            <p>Log in to continue</p>
            <button className="gsi-material-button" onClick={logInWithGoogle} type='button'>
             <div className="gsi-material-button-state"></div>
@@ -130,11 +166,12 @@ function LoginPage() {
             </label>
           <p>or...</p>
            <input type="email" name="newEmail" id="newEmail" placeholder='Email...' onChange={(e)=>{setEmail(e.target.value)}}/>
-            <input type="password" name="newPassword" id="newPassword" placeholder='Password...' onChange={(e)=>{setPass(e.target.value)}}/>
-              <button className="enter" type='submit'>Log In</button>
+            <input type="password" name="newPassword" id="newPassword" placeholder='Password...' onChange={(e)=>{setPass(e.target.value)}} />
+              <button className="enter" type='button' onClick={logIn}>Log In</button>
               <button className="new" type="button" onClick={()=>{dialogRef.current.showModal()}}>Create new account</button>
           </form>
           <NewUserDialog />
+          <ErrorDialog />
     </article>
     : <Navigate to='/' />
   )
