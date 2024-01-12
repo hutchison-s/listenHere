@@ -6,7 +6,7 @@ import YouAreHere from './YouAreHere'
 
 const MapWindow = () => {
   return (
-    <MapContainer center={[41.7378961, -96.0426487]} zoom={18} minZoom={14} >
+    <MapContainer center={[41.7378961, -96.0426487]} zoom={18} minZoom={6} >
         <MapController />
         <FindMe />
         <MapPins />

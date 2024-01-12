@@ -7,9 +7,12 @@ import { AudioPlayerContext } from "../contexts/AudioPlayerContext";
 import AudioControlButton from './AudioControlButton'
 import LikeComponent from "./LikeComponent";
 import DeleteButton from './DeleteButton'
+import { Link } from "react-router-dom";
+import { LocationContext } from "../contexts/LocationContext";
 
 const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
     const {profile} = useContext(UserContext)
+    const {dispatch} = useContext(LocationContext)
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
     const [likedBy, setLikedBy] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
@@ -49,6 +52,11 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
       setIsLoaded(true)
       console.log("sent source")
   }
+
+  const findThis = () => {
+      dispatch({type: 'setLocation', payload: pin.latlng})
+  }
+
     const LoadLogo = ()=>{
         return (
             <img src="/earpin.png" alt="Listen Hear Icon" width='40px' onClick={()=>{
@@ -91,7 +99,7 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
                 Liked by: {likedBy.map((p, idx) => {
                 return <span key={idx+p._id}>{p.displayName}</span>})
             }</div>}
-            <div className="location">Location: <span>Lat: {pin.latlng.lat}<br/>Lng: {pin.latlng.lng}</span></div>
+            <div className="location">Location: <Link  to='/' onClick={findThis}>Lat: {pin.latlng.lat}<br/>Lng: {pin.latlng.lng}</Link></div>
         </div>
       }
     </div>

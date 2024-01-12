@@ -48,9 +48,13 @@
 .details {
     grid-column: 1 /4;
 }
-.details span {
+.details span,
+.details a {
     padding: 0.1rem 0.3rem;
     background-color: var(--darker-25);
+    color: var(--softwhite);
+    text-decoration: none;
+    font-family: 'Nunito', sans-serif;
 }
 
 .pinCard #pausePlay {

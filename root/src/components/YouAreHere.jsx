@@ -11,6 +11,7 @@ const YouAreHere = () => {
     <div className="rotationBox" style={{rotate: location.heading+'deg', maxWidth: '200px'}}>
       <Marker
           position={{lat: location.lat, lng: location.lng}}
+          zIndexOffset={-2}
           icon={youIcon}>
               <Popup>
                 <strong>

@@ -7,8 +7,18 @@
     filter: invert(10%);
     position: relative;
 }
+.leaflet-popup-content-wrapper:has(.faded),
+.leaflet-popup-content-wrapper:has(.faded) + .leaflet-popup-tip-container {
+    opacity: 0.7
+}
+.leaflet-popup-content-wrapper {
+    border-left: 8px solid var(--poolside);
+}
 .leaflet-popup-content {
     min-width: 60vw;
+}
+.leaflet-marker-icon:has(.distant) {
+    opacity: 0.7;
 }
 .popupFooter,
 .popupHeader {
@@ -53,14 +63,23 @@
 #findMe {
     z-index: 1000;
     position: absolute;
-    top: 10px;
+    top: 12px;
     right: 10px;
-    width: 40px;
-    height: 40px;
+    width: calc(90% - 20px);
+    height: 60px;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     font-size: 22px;
     font-weight: 200;
     text-align: center;
     aspect-ratio: 1;
     text-decoration: none;
+    background-color: var(--teal);
+    border: 2px solid var(--poolside);
+    border-radius: 0.25rem;
+    color: var(--softwhite);
+    cursor: pointer;
 }

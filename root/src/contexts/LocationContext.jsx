@@ -14,6 +14,12 @@ const locationReducer = (state, action) => {
                 heading: action.payload.heading || 'No heading available',
                 lastUpdated: action.payload.timestamp
             };
+        case 'setLocation':
+            console.log('location set manually')
+            return {
+                ...state,
+                activePinLoc: action.payload
+            };
         // case 'updateOrientation':
         //     console.log('orientation update fired', action.payload.heading)
         //     return {
@@ -41,7 +47,8 @@ const initialLocation = {
     lng: null,
     heading: null,
     lastUpdated: Date.now(),
-    tracking: true
+    tracking: true,
+    activePinLoc: null
 }
 
 let locationWatcher;

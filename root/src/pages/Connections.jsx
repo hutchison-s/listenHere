@@ -11,24 +11,19 @@ function Connections() {
     const [connections, setConnections] = useState([])
 
     useEffect(()=>{
-        if (connections.length == 0) {
-            if (profile.connections.length > 0) {
-                for (let id of profile.connections) {
-                    getUser(id, (doc)=>{
-                        setConnections([...connections, doc])
-                    })
-                }
-            } else {
-                console.log("No pins associated with user")
-            }
+        setConnections([])
+        for (let id of profile.connections) {
+            getUser(id, (doc)=>{
+                setConnections([...connections, doc])
+            })
         }
-    }, [])
+    }, [profile])
 
     return (
         <>
             <article className="alignCenter">
-                <h2>{profile.connections.length} Connection{profile.connections.length > 1 && "s"}</h2>
-                {connections.length > 0 && connections.map(p => <ConnectionCard key={p._id} viewingProfile={p}/>)}
+                <h2>{profile.connections.length} Connection{profile.connections.length != 1 && "s"}</h2>
+                {connections && connections.map(p => <ConnectionCard key={p._id} viewingProfile={p}/>)}
             </article>
         </>
     )

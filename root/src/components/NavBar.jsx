@@ -50,11 +50,11 @@ function NavBar() {
           <ul>
                 {profile.authorized 
                   ? <>
-                  <Link to="/mysounds" onClick={()=>{setIsExpanded(false)}}>
-                    <li>My Sounds</li>
-                  </Link>
                   <Link to="/" onClick={()=>{setIsExpanded(false)}}>
                     <li>Map</li>
+                  </Link>
+                  <Link to="/mysounds" onClick={()=>{setIsExpanded(false)}}>
+                    <li>My Sounds</li>
                   </Link>
                   <Link to="/connections" onClick={()=>{setIsExpanded(false)}}>
                     <li>Connections</li>
