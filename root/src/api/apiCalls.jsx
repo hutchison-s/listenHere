@@ -62,6 +62,7 @@ export const deletePin = (id, callback) => {
     axios.delete(pinsURL+id)
         .then(res => {
             callback(res.data)
+            console.log(res.data, "deleted")
         }).catch(err => {
             console.log("Error creating pin:", err)
         })

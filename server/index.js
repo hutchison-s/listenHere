@@ -150,7 +150,7 @@ app.delete('/pins/:id', async (req, res) => {
     const { id } = req.params;
   
     try {
-      const deletedPin = await EarPin.findOneAndDelete(id);
+      const deletedPin = await EarPin.findOneAndDelete({_id: id})
       const creatorId = deletedPin.creator.id
   
       if (!deletedPin) {
