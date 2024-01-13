@@ -14,6 +14,7 @@ import Protected from './router/Protected';
 import AwaitLocation from './router/AwaitLocation';
 import { LocationProvider } from './contexts/LocationContext';
 import { AudioPlayerProvider } from './contexts/AudioPlayerContext';
+import ResetPassword from './pages/ResetPassword';
 
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
                     
                     <Route path="help" element={<Help/>} errorElement={<ErrorPage/>}/>,
                     <Route path="login" element={<LoginPage/>} errorElement={<ErrorPage/>}/>
+                    <Route path="resetpassword" element={<ResetPassword/>} errorElement={<ErrorPage/>}/>
                     <Route path='users'>
                       <Route path=':userId' element={<Profile />} errorElement={<ErrorPage />}/>
                     </Route>

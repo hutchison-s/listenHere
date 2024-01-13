@@ -78,6 +78,12 @@ label:has(#remember) {
   background-color: var(--teal);
   color: var(--softwhite)
 }
+#errorDialog a {
+  font-size: small;
+  display: block;
+  margin: 1.5rem auto 0.5rem;
+  color: var(--softwhite);
+}
 #newUserDialog input {
   display: block;
   margin: 0.5rem auto;
