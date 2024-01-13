@@ -54,7 +54,7 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
   }
 
   const findThis = () => {
-      dispatch({type: 'setLocation', payload: pin.latlng})
+      dispatch({type: 'setActivePinLocation', payload: pin.latlng})
   }
 
     const LoadLogo = ()=>{
