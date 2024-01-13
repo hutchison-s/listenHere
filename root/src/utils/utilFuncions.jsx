@@ -32,8 +32,8 @@ export const timestampToString = (timestamp) => {
   }
 
 export const isSignificant = (threshold, oldLoc, newLoc) => {
-    let xMoved = Math.abs(Math.abs(oldLoc.lat)-Math.abs(newLoc.lat)) > threshold
-    let yMoved = Math.abs(Math.abs(oldLoc.lng)-Math.abs(newLoc.lng)) > threshold
-    let isBig = (xMoved || yMoved)
-    return isBig;
+  let x = Math.abs(oldLoc.lat - newLoc.lat)
+  let y = Math.abs(oldLoc.lng - newLoc.lng)
+  let h = Math.sqrt((x ** 2) + (y ** 2))
+  return h > threshold
 }

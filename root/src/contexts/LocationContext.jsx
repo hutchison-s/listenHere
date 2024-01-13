@@ -1,4 +1,5 @@
 import { createContext, useEffect, useReducer } from "react";
+import { isSignificant } from "../utils/utilFuncions";
 
 export const LocationContext = createContext(null)
 
@@ -14,19 +15,12 @@ const locationReducer = (state, action) => {
                 heading: action.payload.heading || 'No heading available',
                 lastUpdated: action.payload.timestamp
             };
-        case 'setLocation':
-            console.log('location set manually')
+        case 'setActivePinLocation':
+            console.log('Active pin location set')
             return {
                 ...state,
                 activePinLoc: action.payload
             };
-        // case 'updateOrientation':
-        //     console.log('orientation update fired', action.payload.heading)
-        //     return {
-        //         ...state,
-        //         heading: action.payload.heading,
-        //         timestamp: action.payload.timestamp
-        //     };
         case 'toggleTracking':
             status = action.payload ? 'on' : 'off'
             console.log("tracking turned", status)
@@ -52,35 +46,11 @@ const initialLocation = {
 }
 
 let locationWatcher;
-// let orientationWatcher;
-
-// function grantPermission() {
-//             // feature detect
-//             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-//               DeviceOrientationEvent.requestPermission()
-//                 .then(permissionState => {
-//                   console.log("orientation permission:", permissionState)
-//                 })
-//                 .catch(console.error);
-//             } else {
-//               // handle regular non iOS 13+ devices
-//             }
-//           }
 
 // eslint-disable-next-line react/prop-types
 export const LocationProvider = ({children}) => {
 
-    // const [location, setLocation] = useState(null)
-    // const [heading, setHeading] = useState(0)
-
     const [location, dispatch] = useReducer(locationReducer, initialLocation)
-
-    // useEffect(()=>{
-    //     let confirmed = confirm('Use device orientation?')
-    //     if (confirmed) {
-    //         grantPermission()
-    //     }
-    // }, [])
 
     useEffect(()=>{
         if (location.tracking) {
@@ -90,27 +60,22 @@ export const LocationProvider = ({children}) => {
                 console.log("from watcher:",position)
                 const {latitude, longitude, heading} = position.coords;
                 const {timestamp} = position
-                dispatch({type: 'updateLocation', payload: {latitude, longitude, heading, timestamp}})
+                    if (!location.lat || isSignificant(0.0001, {lat: location.lat, lng: location.lng}, {lat: latitude, lng: longitude})) {
+                        dispatch({type: 'updateLocation', payload: {latitude, longitude, heading, timestamp}})
+                    } else {
+                        console.log("Minimal movement detected. Location updating skipped.")
+                    }
+                
             }, (error)=>{
                 dispatch({type: 'error', payload: {error}})
             }, {enableHighAccuracy: true})
-
-            // orientationWatcher = window.addEventListener('deviceorientation', (e)=>{
-            //     const heading = e.alpha
-            //     dispatch({type: 'updateOrientation', payload: {heading, timestamp: Date.now()}})
-            // })
         }
         
 
         return ()=>{
             navigator.geolocation.clearWatch(locationWatcher);
-            // window.removeEventListener('deviceorientation', orientationWatcher)
         }
     }, [location.tracking])
-
-    useEffect(()=>{
-        console.log("state change => location set to:", location)
-    }, [location])
     
     return (
         <LocationContext.Provider value={{location, dispatch}}>
