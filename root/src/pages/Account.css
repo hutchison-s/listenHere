@@ -9,6 +9,7 @@
     border-radius: 50%;
     aspect-ratio: 1;
     overflow: hidden;
+    position: relative;
 }
 .profileLarge img {
     width: 100%;
@@ -19,6 +20,13 @@
     align-items: center;
     justify-content: flex-start;
     padding-top: 3vh;
+    gap: 1rem;
+}
+.accountInfoWrapper {
+    width: 80%;
+    max-width: 500px;
+    display: grid;
+    text-align: center;
     gap: 1rem;
 }
 .connectionsBox {
@@ -69,4 +77,74 @@
     color: var(--jet);
     border-radius: 100ch;
     border: none;
+}
+#editPhoto {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    translate: -50%;
+    color: var(--softwhite);
+    font-size: 1rem;
+    border: 1px solid var(--softwhite);
+    background-color: var(--darker-50);
+    padding: 0.2rem;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    width: 2rem;
+    display: grid;
+    place-items: center;
+}
+.sideEdit {
+    font-size: medium;
+}
+#updateInfoForm {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    display: grid;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 2rem;
+    min-width: 300px;
+    border: 2px solid var(--poolside);
+    border-radius: 0.5rem;
+    background: var(--teal);
+    color: var(--softwhite);
+}
+#updateInfoForm p {
+    margin-bottom: 2rem;
+}
+#updateInfoForm input,
+#updateInfoForm textarea {
+    border: 1px solid var(--softwhite);
+    border-radius: 0.25rem;
+    background-color: var(--darker-50);
+    color: var(--softwhite);
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    padding: 0.5rem;
+}
+#updateInfoForm button[type='submit'] {
+    background-color: var(--yellow);
+    color: var(--jet);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 60%;
+    margin: 1rem auto 0;
+}
+#updateInfoForm .closeForm {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: grid;
+    place-content: center;
+    width: 1.5rem;
+    aspect-ratio: 1;
+    font-size: 1rem;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid var(--softwhite);
+    color: var(--softwhite)
 }

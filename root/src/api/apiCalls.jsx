@@ -31,6 +31,15 @@ export const getUser = (id, callback)=>{
         })
 }
 
+export const updateUserInfo = (id, info, callback)=>{
+    axios.patch(usersURL+id, info)
+        .then(res =>{
+            callback(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+}
+
 export const getPin = (id, callback)=>{
     axios.get(pinsURL+id)
         .then(res => {

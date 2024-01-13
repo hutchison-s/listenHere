@@ -12,7 +12,7 @@ function Profile() {
     const {profile, updateProfile} = useContext(UserContext)
     const [viewingProfile, setViewingProfile] = useState(null)
     const [connections, setConnections] = useState([])
-
+    
 
     useEffect(()=>{
         getUser(userId, (primary)=>{
@@ -39,12 +39,14 @@ function Profile() {
                         : null
                     }
                     <h2>{viewingProfile.displayName}</h2>
+                    <p>Bio:<br/>{viewingProfile.bio}</p>
                     <p><small>{viewingProfile.email}</small></p>
                     <p>Active pins: {viewingProfile.pins.length}</p>
                     <p>Viewed pins: {viewingProfile.viewed.length}</p>
                     <p>Liked pins: {viewingProfile.liked.length}</p>
                     <ConnectionsBox viewingProfile={viewingProfile} profile={profile} connections={connections}/>
             </article>
+            
         </>
         : null
     )
