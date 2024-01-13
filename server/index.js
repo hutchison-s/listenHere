@@ -244,7 +244,7 @@ app.post('/users', async (req, res) => {
 app.patch('/users/:id', async (req, res) => {
     const { id } = req.params;
     const updateObject = {};
-    for (let field in Object.keys(req.body)) {
+    for (let field in req.body) {
         updateObject[field] = req.body[field]
     }
   
