@@ -150,23 +150,24 @@ app.delete('/pins/:id', async (req, res) => {
     const { id } = req.params;
   
     try {
-      const deletedPin = await EarPin.findOneAndDelete({_id: id})
-      const creatorId = deletedPin.creator.id
-  
-      if (!deletedPin) {
-        return res.status(404).json({ error: 'Pin not found.' });
-      }
+        const deletedPin = await EarPin.findOneAndDelete({_id: id})
+        const creatorId = deletedPin.creator.id
+    
+        if (!deletedPin) {
+            return res.status(404).json({ error: 'Pin not found.' });
+        }
 
-      const updatedUser = await User.findByIdAndUpdate(
-        creatorId, 
-        {$pull: {pins: deletedPin._id}},
-        {new: true}
+        const updatedCreator = await User.findByIdAndUpdate(
+            creatorId, 
+            {$pull: {pins: deletedPin._id}},
+            {new: true}
         )
-        if (!updatedUser) {
+        if (!updatedCreator) {
             return res.status(404).json({ error: 'Error removing pin from user profile.' });
-          }
-  
-      res.json({ message: 'Pin deleted successfully.' });
+        }
+        await User.updateMany({viewed: id}, {$pull: {viewed: id}})
+        await User.updateMany({liked: id}, {$pull: {liked: id}})
+        res.json({ message: 'Pin deleted successfully.' });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
