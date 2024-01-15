@@ -12,7 +12,7 @@ import LikeComponent from './LikeComponent'
 
 function EarPinMarker({pin}) {
 
-    const {profile, updateProfile} = useContext(UserContext)
+    const {profile} = useContext(UserContext)
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
     const {location} = useContext(LocationContext)
     const [isClose, setIsClose] = useState(false)
@@ -39,10 +39,6 @@ function EarPinMarker({pin}) {
             const b = base64toBlob(pin.data)
             setSrcBlob(b);
             console.log("sent source")
-            updateProfile()
-            audioRef.current.play()
-            audioRef.current.pause()
-            audioRef.current.currentTime = 0
           },
           popupclose: ()=>{
             audioRef && audioRef.current.pause()

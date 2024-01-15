@@ -28,10 +28,10 @@ export default function NewRecording() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({audio: true})
                 .then((stream) => {
-                    const mediaRecorder = new MediaRecorder(stream)
+                    const mediaRecorder = new MediaRecorder(stream, {mimeType: 'audio/mp4; codecs=mp4a.40.2'})
                     mediaRecorder.ondataavailable = (e)=>{chunks.push(e.data)}
                     mediaRecorder.onstop = ()=>{
-                        const blob = new Blob(chunks, { type: "audio/mpeg3" });
+                        const blob = new Blob(chunks, { type: 'audio/mp4; codecs=mp4a.40.2' });
                         setTempBlob(blob)
                         chunks.length = 0;
                         setSrcBlob(blob);

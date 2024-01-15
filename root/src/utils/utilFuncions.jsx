@@ -1,6 +1,7 @@
 
-// @desc Converts base64 string with encoding prefix to mp3 encoded blob
+// Converts base64 string with encoding prefix to mp4 encoded blob
 export const base64toBlob = (base64Data) => {
+    console.log(base64Data.slice(0, 20))
     const base64EncodedString = base64Data.split(';base64,')[1];
     const binaryData = atob(base64EncodedString);
     const arrayBuffer = new ArrayBuffer(binaryData.length);
@@ -8,11 +9,12 @@ export const base64toBlob = (base64Data) => {
     for (let i = 0; i < binaryData.length; i++) {
       uint8Array[i] = binaryData.charCodeAt(i);
     }
-    const blobData = new Blob([arrayBuffer], { type: 'audio/mpeg3' });
+    const blobData = new Blob([arrayBuffer], { type: 'audio/mp4; codecs=mp4a.40.2' });
 
     return blobData
   }
 
+  // Converts blob to base64 string
 export const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
     const reader = new FileReader;
     reader.onerror = reject;
@@ -22,7 +24,7 @@ export const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
     reader.readAsDataURL(blob);
 });
 
-// @desc Converts toString() timestamp to readable time-date string
+// Converts toString() timestamp to readable time-date string
 export const timestampToString = (timestamp) => {
     const date = new Date(timestamp)
     if (date.toLocaleTimeString() == 'Invalid Date') {
@@ -31,6 +33,7 @@ export const timestampToString = (timestamp) => {
     return `${date.toLocaleTimeString()} ${date.toDateString()}`
   }
 
+  // measures whether new location is farther than the threshold away from the old location via pythagoras
 export const isSignificant = (threshold, oldLoc, newLoc) => {
   let x = Math.abs(oldLoc.lat - newLoc.lat)
   let y = Math.abs(oldLoc.lng - newLoc.lng)
