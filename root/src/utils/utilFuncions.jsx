@@ -37,3 +37,12 @@ export const isSignificant = (threshold, oldLoc, newLoc) => {
   let h = Math.sqrt((x ** 2) + (y ** 2))
   return h > threshold
 }
+
+export const initAudio = () => {
+  let silentSound = new Audio("./silence.mp3");
+  silentSound.autoplay="";
+  silentSound.muted="";
+  silentSound.playsinline=""
+  silentSound.load();
+  return silentSound
+}

@@ -57,7 +57,7 @@ export const LocationProvider = ({children}) => {
             console.log("Using navigator to search for current location.")
             locationWatcher = navigator.geolocation.watchPosition((position)=>{
 
-                console.log("from watcher:",position)
+                console.log("from watcher:")
                 const {latitude, longitude, heading} = position.coords;
                 const {timestamp} = position
                     if (!location.lat || isSignificant(0.0001, {lat: location.lat, lng: location.lng}, {lat: latitude, lng: longitude})) {

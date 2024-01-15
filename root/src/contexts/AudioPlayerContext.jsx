@@ -7,16 +7,8 @@ export const AudioPlayerProvider = ({children}) => {
 
     const [srcBlob, setSrcBlob] = useState(null)
     const [url, setUrl] = useState(null)
-    const [controls, setControls] = useState({play: null, pause: null})
     const audioRef = useRef()
 
-    useEffect(()=>{
-        setControls({
-            play: audioRef.current.play,
-            pause: audioRef.current.pause
-        })
-    }, [])
-    
     useEffect(()=>{
         if (srcBlob) {
             let str = window.URL.createObjectURL(srcBlob)
@@ -26,8 +18,8 @@ export const AudioPlayerProvider = ({children}) => {
     }, [srcBlob])
     
     return (
-        <AudioPlayerContext.Provider value={{audioRef, controls, setSrcBlob}}>
-            <audio src={url} ref={audioRef}/>
+        <AudioPlayerContext.Provider value={{audioRef, setSrcBlob}}>
+            <audio src={url} ref={audioRef} preload="true"/>
             {children}
         </AudioPlayerContext.Provider>
 

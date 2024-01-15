@@ -5,6 +5,7 @@ import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import { AudioPlayerContext } from '../contexts/AudioPlayerContext'
 import { viewPin } from '../api/apiCalls'
 import { UserContext } from '../contexts/UserContext'
+import { initAudio } from '../utils/utilFuncions'
 
 const AudioControlButton = ({pin}) => {
 
@@ -19,20 +20,26 @@ const AudioControlButton = ({pin}) => {
         setIsPlaying(false)
     }
     const onClick = (e)=>{
-      e.preventDefault()
-      if (isPlaying) {
-        audioRef.current.pause()
-      } else {
-        audioRef.current.play()
-        if (pin) {
-          viewPin(pin, profile, ({message})=>{
-            console.log(message)
-          })
-          updateProfile()
-        }
-        
-      } 
-      setIsPlaying((isPlaying)=>!isPlaying)
+      initAudio.play().then(res=>{
+        console.log('init audio response:', res)
+        e.preventDefault()
+        if (isPlaying) {
+          audioRef.current.pause()
+        } else {
+          audioRef.current.play()
+          if (pin) {
+            viewPin(pin, profile, ({message})=>{
+              console.log(message)
+            })
+            updateProfile()
+          }
+          
+        } 
+        setIsPlaying((isPlaying)=>!isPlaying)
+    }).catch(err=>{
+      console.log('init audio error:', err)
+    })
+      
     }
   return (
     <button 
