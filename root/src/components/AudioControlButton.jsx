@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import { AudioPlayerContext } from '../contexts/AudioPlayerContext'
@@ -12,6 +12,11 @@ const AudioControlButton = ({pin}) => {
     const [isPlaying, setIsPlaying] = useState(false)
     const {audioRef} = useContext(AudioPlayerContext)
     const {profile, updateProfile} = useContext(UserContext)
+    const [silentAudio, setSilentAudio] = useState(null)
+
+    useEffect(()=>{
+      setSilentAudio(initAudio())
+    }, [])
 
     audioRef.current.onended = ()=>{
         setIsPlaying(false)
@@ -20,7 +25,7 @@ const AudioControlButton = ({pin}) => {
         setIsPlaying(false)
     }
     const onClick = (e)=>{
-      initAudio.play().then(res=>{
+      silentAudio.play().then(res=>{
         console.log('init audio response:', res)
         e.preventDefault()
         if (isPlaying) {
