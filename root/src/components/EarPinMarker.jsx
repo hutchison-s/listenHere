@@ -40,6 +40,9 @@ function EarPinMarker({pin}) {
             setSrcBlob(b);
             console.log("sent source")
             updateProfile()
+            audioRef.current.play()
+            audioRef.current.pause()
+            audioRef.current.currentTime = 0
           },
           popupclose: ()=>{
             audioRef && audioRef.current.pause()

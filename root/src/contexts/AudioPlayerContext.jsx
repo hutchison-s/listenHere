@@ -7,6 +7,7 @@ export const AudioPlayerProvider = ({children}) => {
 
     const [srcBlob, setSrcBlob] = useState(null)
     const [url, setUrl] = useState(null)
+    const [locked, setLocked] = useState(true)
     const audioRef = useRef()
 
     useEffect(()=>{
@@ -16,6 +17,21 @@ export const AudioPlayerProvider = ({children}) => {
                 console.log("source is set to", str)
             }
     }, [srcBlob])
+
+    useEffect(()=>{
+        const locker = document.body.addEventListener('pointerdown', ()=>{
+            if (locked) {
+                audioRef.current.play()
+                audioRef.current.pause()
+                audioRef.current.currentTime = 0
+                setLocked(false)
+            }
+        }, false)
+        return ()=>{
+            document.body.removeEventListener('pointerdown', locker)
+            setLocked(true)
+        }
+    }, [])
     
     return (
         <AudioPlayerContext.Provider value={{audioRef, setSrcBlob}}>
