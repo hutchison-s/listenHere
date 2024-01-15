@@ -15,12 +15,11 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
     const {dispatch} = useContext(LocationContext)
     const {audioRef, setSrcBlob} = useContext(AudioPlayerContext)
     const [likedBy, setLikedBy] = useState([])
-    const [isLoaded, setIsLoaded] = useState(false)
+    const [isSoundSet, setIsSoundSet] = useState(false)
     const [pin, setPin] = useState(null)
 
     useEffect(()=> {
       getPin(pinId, (thisPin)=>{
-          console.log('retrieved', thisPin.title)
           setPin(thisPin)
       })
     }, [profile])
@@ -35,10 +34,9 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
             }))
           }
         } else {
-          setIsLoaded(false)
+          setIsSoundSet(false)
         }
-      }
-
+      } 
       return ()=>{
         setLikedBy([])
       }
@@ -49,7 +47,7 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
       audioRef.current.pause()
       const b = base64toBlob(pin.data)
       setSrcBlob(b);
-      setIsLoaded(true)
+      setIsSoundSet(true)
       console.log("sent source")
   }
 
@@ -69,7 +67,7 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
     pin 
     ? <div className="pinCard">
       <div className="pinCardLeft">
-        {isLoaded ? <AudioControlButton /> : <LoadLogo />}
+        {isSoundSet && (profile.viewed.includes(pin._id) || profile.pins.includes(pin._id)) ? <AudioControlButton /> : <LoadLogo />}
       </div>
       <div className="pinCardMiddle" onClick={()=>{
           if (isFeatured !== pin._id) {
@@ -85,30 +83,30 @@ const PinCard = ({ pinId, isFeatured, setIsFeatured }) => {
       </div>
       <div className="pinCardRight">
         <LikeComponent pin={pin} profile={profile} />
-        <DeleteButton pin={pin}/>
+        {profile._id == pin.creator.id ? <DeleteButton pin={pin}/> : null}
       </div>
       <div className="pinCardFooter">
-        <p>
           <small>{timestampToString(pin.timestamp)}</small>
-        </p>
+          <small>{pin.viewedBy.length} view{pin.viewedBy.length != 1 ? 's' : ''}</small>
       </div>
       {isFeatured == pin._id && 
         <div className="details">
-            <div className="tagsBox">Tags: {pin.tags.map((tag, idx) => <span key={idx+tag}>{tag}</span>)}</div>
+            {pin.creator.id != profile._id && <div className="creatorBox">Creator: <Link to={`/users/${pin.creator.id}`}>{pin.creator.displayName}</Link></div>}
+            {pin.tags.length > 0 && <div className="tagsBox">Tags: {pin.tags.map((tag, idx) => <span key={idx+tag}>{tag}</span>)}</div>}
             {likedBy.length > 0 && <div className="likedBy">
                 Liked by: {likedBy.map((p, idx) => {
-                return <span key={idx+p._id}>{p.displayName}</span>})
+                return <Link to={`/users/${p._id}`} key={idx+p._id}>{p.displayName}</Link>})
             }</div>}
             <div className="location">Location: <Link  to='/' onClick={findThis}>Lat: {pin.latlng.lat}<br/>Lng: {pin.latlng.lng}</Link></div>
         </div>
       }
     </div>
     : <div className="pinCard">
-      <div className="pinCarLeft"><p> </p></div>
-      <div className="pinCardMiddle"><h3>...</h3></div>
-      <div className="pinCardRight"><p> </p></div>
-      <div className="pinCardFooter"><p><small>...</small></p></div>
-    </div>
+        <div className="pinCarLeft"><p> </p></div>
+        <div className="pinCardMiddle"><h3>...</h3></div>
+        <div className="pinCardRight"><p> </p></div>
+        <div className="pinCardFooter"><p><small>...</small></p></div>
+      </div>
   );
 };
 

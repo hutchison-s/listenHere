@@ -14,7 +14,7 @@ const DeleteButton = ({pin}) => {
             updateProfile()
         })
     }}>
-        <FontAwesomeIcon icon={faTrash}/>
+        <FontAwesomeIcon icon={faTrash}/><span>&nbsp;&nbsp;&nbsp;</span>
     </button>
   )
 }

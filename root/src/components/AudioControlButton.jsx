@@ -24,10 +24,13 @@ const AudioControlButton = ({pin}) => {
         audioRef.current.pause()
       } else {
         audioRef.current.play()
-        viewPin(pin, profile, ({message})=>{
-          console.log(message)
-        })
-        updateProfile()
+        if (pin) {
+          viewPin(pin, profile, ({message})=>{
+            console.log(message)
+          })
+          updateProfile()
+        }
+        
       } 
       setIsPlaying((isPlaying)=>!isPlaying)
     }

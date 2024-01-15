@@ -6,6 +6,7 @@
     place-content: center;
     width: 95%;
     max-width: 600px;
+    margin: auto;
     border: 1px solid var(--softwhite);
     box-shadow: 0 0 10px var(--yellow-50);
     font-family: 'Nunito', sans-serif;
@@ -35,7 +36,10 @@
     grid-column: 1 / 4;
     font-size: small;
     text-align: center;
+    display: flex;
+    justify-content: space-evenly;
 }
+.creatorBox,
 .tagsBox,
 .likedBy,
 .location {

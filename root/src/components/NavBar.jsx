@@ -38,7 +38,7 @@ function NavBar() {
         </div>
         <div className="rightNav">
           {profile.authorized 
-            ? <Link to="/account" id='helloUser' onClick={()=>{setIsExpanded(false)}}>
+            ? <Link to={`/users/${profile._id}`} id='helloUser' onClick={()=>{setIsExpanded(false)}}>
                   {profile.photo ? <img src={profile.photo} alt='profile photo'/> : <FontAwesomeIcon icon={faUser}/>}
               </Link>
             : null}
@@ -53,13 +53,13 @@ function NavBar() {
                   <Link to="/" onClick={()=>{setIsExpanded(false)}}>
                     <li>Map</li>
                   </Link>
-                  <Link to="/mysounds" onClick={()=>{setIsExpanded(false)}}>
+                  <Link to={`/users/${profile._id}/sounds`} onClick={()=>{setIsExpanded(false)}}>
                     <li>My Sounds</li>
                   </Link>
                   <Link to="/connections" onClick={()=>{setIsExpanded(false)}}>
                     <li>Connections</li>
                   </Link>
-                  <Link to="/account" onClick={()=>{setIsExpanded(false)}}>
+                  <Link to={`/users/${profile._id}`} onClick={()=>{setIsExpanded(false)}}>
                     <li>Account</li>
                   </Link>
                       <li onClick={(e)=>{

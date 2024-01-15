@@ -32,7 +32,11 @@ export const UserProvider = ({children}) => {
     function updateProfile() {
         axios.get('https://listen-here-api.onrender.com/users/'+profile._id)
             .then(res => {
-                setProfile(res.data)
+                setProfile(prevProfile => ({
+                    ...prevProfile,
+                    ...res.data
+                  }));
+                console.log('updated profile')
             }).catch(err => {
                 console.log(err)
             })
