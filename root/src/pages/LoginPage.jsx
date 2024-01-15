@@ -4,6 +4,7 @@ import { useContext, useEffect, useState, useRef } from 'react'
 import { auth, googleProvider } from '../config/firebase'
 import { createUserWithEmailAndPassword, signInWithPopup, signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence, setPersistence } from 'firebase/auth'
 import { Navigate, Link } from 'react-router-dom'
+import { initAudio } from '../utils/utilFuncions'
 
 function LoginPage() {
 
@@ -12,6 +13,7 @@ function LoginPage() {
   const [user, setUser] = useState(null)
   const [rememberMe, setRememberMe] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
+  const [silentAudio, setSilentAudio] = useState(null)
 
   const {profile, getProfileFromUser} = useContext(UserContext)
   const dialogRef = useRef(null)
@@ -20,6 +22,7 @@ function LoginPage() {
     if (localStorage['firebase:authUser:AIzaSyBIFnE9a5XGHULxSfXgqdzvluNPSc-Wsic:[DEFAULT]']) {
       setUser(JSON.parse(localStorage['firebase:authUser:AIzaSyBIFnE9a5XGHULxSfXgqdzvluNPSc-Wsic:[DEFAULT]']))
     }
+    setSilentAudio(initAudio())
   }, [])
 
   useEffect(()=>{
@@ -29,6 +32,11 @@ function LoginPage() {
   }, [user])
 
   const logInWithGoogle = async () => {
+    silentAudio.play().then(res=>{
+      console.log('init audio response:', res)
+    }).catch(err=>{
+      console.log('init audio error:', err)
+    })
     try {
       await signInWithPopup(auth, googleProvider)
       const persistenceType = rememberMe

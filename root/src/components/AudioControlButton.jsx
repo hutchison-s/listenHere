@@ -1,22 +1,16 @@
 import PropTypes from 'prop-types'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import { AudioPlayerContext } from '../contexts/AudioPlayerContext'
 import { viewPin } from '../api/apiCalls'
 import { UserContext } from '../contexts/UserContext'
-import { initAudio } from '../utils/utilFuncions'
 
 const AudioControlButton = ({pin}) => {
 
     const [isPlaying, setIsPlaying] = useState(false)
     const {audioRef} = useContext(AudioPlayerContext)
     const {profile, updateProfile} = useContext(UserContext)
-    const [silentAudio, setSilentAudio] = useState(null)
-
-    useEffect(()=>{
-      setSilentAudio(initAudio())
-    }, [])
 
     audioRef.current.onended = ()=>{
         setIsPlaying(false)
@@ -25,8 +19,6 @@ const AudioControlButton = ({pin}) => {
         setIsPlaying(false)
     }
     const onClick = (e)=>{
-      silentAudio.play().then(res=>{
-        console.log('init audio response:', res)
         e.preventDefault()
         if (isPlaying) {
           audioRef.current.pause()
@@ -41,10 +33,6 @@ const AudioControlButton = ({pin}) => {
           
         } 
         setIsPlaying((isPlaying)=>!isPlaying)
-    }).catch(err=>{
-      console.log('init audio error:', err)
-    })
-      
     }
   return (
     <button 
